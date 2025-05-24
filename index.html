@@ -10,7 +10,14 @@
 <body>
   <div id="app">
     <h1>Привет, Катюша!</h1>
-    <p>Это начало твоего Портала. Здесь скоро появится чат с Зигги и Жевачка.</p>
+    <p>Это твой живой Портал. Здесь уже работает чат с Зигги и прикрепление изображений.</p>
+    <form id="chat-form">
+      <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
+      <input type="file" id="file-input" />
+      <button type="submit">Отправить</button>
+    </form>
+    <div id="chat-box"></div>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
