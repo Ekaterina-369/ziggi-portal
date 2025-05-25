@@ -58,7 +58,7 @@ try {
   const deepseekResponse = await axios.post(
     'https://openrouter.ai/api/v1/chat/completions',
     {
-      model: 'deepseek-coder',
+      model: 'deepseek-chat',
       messages: [{ role: 'user', content: prompt }],
     },
     {
