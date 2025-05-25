@@ -52,19 +52,19 @@ exports.handler = async (event) => {
   } catch (e) {
     results.yandexgpt = "⚠️ Ошибка YandexGPT";
   }
-
+  
 // DeepSeek через OpenRouter
 try {
   const deepseekResponse = await axios.post(
     'https://openrouter.ai/api/v1/chat/completions',
     {
-      model: 'tngtech/deepseek-llm-r1t-chimera',
+      model: 'tngtech/deepseek-r1t-chimera:free',
       messages: [{ role: 'user', content: prompt }],
     },
     {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
         'HTTP-Referer': 'https://ziggi-portal.netlify.app/',
         'X-Title': 'Ziggi Portal',
       },
@@ -72,7 +72,7 @@ try {
   );
   results.deepseek = deepseekResponse.data.choices[0].message.content;
 } catch (error) {
-  results.deepseek = `❌ Ошибка: ${error.message}`;
+  results.deepseek = `❌ Ошибка: ${error.response?.status || ''} ${error.message}`;
 }
 
   return {
