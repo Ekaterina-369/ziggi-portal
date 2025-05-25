@@ -71,7 +71,7 @@ try {
   );
   results.deepseek = deepseekResponse.data.choices[0].message.content;
 } catch (error) {
-  results.deepseek = '❌ Ошибка DeepSeek';
+ results.deepseek = `❌ Ошибка: ${error.message}`;
 }
 
   return {
