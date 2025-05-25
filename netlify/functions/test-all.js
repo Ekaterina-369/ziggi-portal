@@ -53,12 +53,12 @@ exports.handler = async (event) => {
     results.yandexgpt = "⚠️ Ошибка YandexGPT";
   }
 
- // DeepSeek через OpenRouter
+// DeepSeek через OpenRouter
 try {
   const deepseekResponse = await axios.post(
     'https://openrouter.ai/api/v1/chat/completions',
     {
-      model: 'deepseek-chat',
+      model: 'deepseek-coder',
       messages: [{ role: 'user', content: prompt }],
     },
     {
