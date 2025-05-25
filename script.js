@@ -53,7 +53,8 @@ function chooseModel(message) {
     lower.includes("чувства") ||
     lower.includes("юмор") ||
     lower.includes("душевность") ||
-    lower.includes("по русски")
+    lower.includes("по русски") ||
+     lower.includes("шутка")
   ) {
     return "yandexgpt";
   }
