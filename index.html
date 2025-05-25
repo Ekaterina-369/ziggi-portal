@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -11,13 +10,25 @@
   <div id="app">
     <h1>Привет, Катюша!</h1>
     <p>Это твой живой Портал. Здесь уже работает чат с Зигги и прикрепление изображений.</p>
+
     <form id="chat-form">
       <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
       <input type="file" id="file-input" />
       <button type="submit">Отправить</button>
     </form>
+
     <div id="chat-box"></div>
+
+    <hr />
+    <h2>Проверка всех ИИ</h2>
+    <p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
+
+    <input id="testPrompt" placeholder="Напиши сюда свой вопрос" style="width: 100%; padding: 8px;" />
+    <button onclick="testAll()">Проверить всех</button>
+
+    <pre id="testResult" style="white-space: pre-wrap; background: #f0f0f0; padding: 10px; margin-top: 10px;"></pre>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
