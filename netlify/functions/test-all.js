@@ -31,27 +31,26 @@ exports.handler = async (event) => {
 
   // YandexGPT
   try {
-    const yandexResponse = await axios.post(
-      'https://llm.api.cloud.yandex.net/foundationModels/v1/completion',
-      {
-        modelUri: `gpt://{your-folder-id}/yandexgpt/latest`,
+    const yandexResponse = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`
+      },
+      body: JSON.stringify({
+        modelUri: `gpt://${process.env.YANDEX_FOLDER_ID}/yandexgpt/latest`,
         completionOptions: {
           stream: false,
           temperature: 0.6,
-          maxTokens: 1000,
+          maxTokens: 200
         },
-        messages: [{ role: 'user', text: prompt }],
-      },
-      {
-        headers: {
-          Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    results.yandex = yandexResponse.data.result.alternatives[0].message.text;
-  } catch (error) {
-    results.yandex = '❌ Ошибка YandexGPT';
+        messages: [{ role: "user", text: prompt }]
+      })
+    });
+    const yandexData = await yandexResponse.json();
+    results.yandexgpt = yandexData.result?.alternatives?.[0]?.message?.text || "❗️Нет ответа";
+  } catch (e) {
+    results.yandexgpt = "⚠️ Ошибка YandexGPT";
   }
 
   // DeepSeek напрямую
