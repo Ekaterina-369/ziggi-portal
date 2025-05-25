@@ -9,7 +9,7 @@ exports.handler = async (event) => {
     deepseek: "⛔️ Нет ответа"
   };
 
-  // ChatGPT
+  // ChatGPT (через OpenAI)
   try {
     const chatGptResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -53,13 +53,13 @@ exports.handler = async (event) => {
     results.yandexgpt = "⚠️ Ошибка YandexGPT";
   }
 
-  // DeepSeek
+  // DeepSeek через OpenRouter
   try {
-    const deepseekResponse = await fetch("https://api.deepseek.com/v1/chat/completions", {
+    const deepseekResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "deepseek-chat",
@@ -69,7 +69,7 @@ exports.handler = async (event) => {
     const deepseekData = await deepseekResponse.json();
     results.deepseek = deepseekData.choices?.[0]?.message?.content || "❗️Нет ответа";
   } catch (e) {
-    results.deepseek = "⚠️ Ошибка DeepSeek";
+    results.deepseek = "⚠️ Ошибка DeepSeek (через OpenRouter)";
   }
 
   return {
