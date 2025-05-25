@@ -60,3 +60,16 @@ function chooseModel(message) {
 
   return "chatgpt";
 }
+
+async function sendToModel(model, prompt) {
+  const response = await fetch(`/.netlify/functions/${model}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt })
+  });
+
+  const data = await response.json();
+
+  if (data.reply) return data.reply;
+  else throw new Error(data.error || "Ответ не получен");
+}
