@@ -19,64 +19,59 @@ exports.handler = async (event) => {
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
-          'X-Title': 'Ziggi Portal'
-        }
+        },
       }
     );
-    results.chatgpt = chatResponse.data.choices?.[0]?.message?.content || '! Нет ответа';
-  } catch (err) {
-    results.chatgpt = '! Ошибка ChatGPT';
+    results.chatgpt = chatResponse.data.choices[0].message.content;
+  } catch (error) {
+    results.chatgpt = '❌ Ошибка ChatGPT';
   }
 
-  // YandexGPT напрямую
+  // YandexGPT
   try {
-    const yandexResp = await axios.post(
+    const yandexResponse = await axios.post(
       'https://llm.api.cloud.yandex.net/foundationModels/v1/completion',
       {
-        modelUri: 'gpt://b1gpnvp4e6d54l2k6qcn/yandexgpt-lite',
+        modelUri: `gpt://{your-folder-id}/yandexgpt/latest`,
         completionOptions: {
           stream: false,
           temperature: 0.6,
-          maxTokens: 2000,
+          maxTokens: 1000,
         },
-        messages: [
-          { role: 'user', text: prompt }
-        ]
+        messages: [{ role: 'user', text: prompt }],
       },
       {
         headers: {
-          'Authorization': `Api-Key ${process.env.YANDEX_API_KEY}`,
-          'x-folder-id': process.env.YANDEX_FOLDER_ID,
+          Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`,
           'Content-Type': 'application/json',
-        }
+        },
       }
     );
-    results.yandex = yandexResp.data.choices?.[0]?.text || '! Нет ответа';
-  } catch (err) {
-    results.yandex = '! Ошибка YandexGPT';
+    results.yandex = yandexResponse.data.result.alternatives[0].message.text;
+  } catch (error) {
+    results.yandex = '❌ Ошибка YandexGPT';
   }
 
-  // DeepSeek через OpenRouter
+  // DeepSeek напрямую
   try {
-    const deepResponse = await axios.post(
-      'https://openrouter.ai/api/v1/chat/completions',
+    const deepseekResponse = await axios.post(
+      'https://api.deepseek.com/v1/chat/completions',
       {
         model: 'deepseek-chat',
         messages: [{ role: 'user', content: prompt }],
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
           'Content-Type': 'application/json',
-          'X-Title': 'Ziggi Portal'
-        }
+        },
       }
     );
-    results.deepseek = deepResponse.data.choices?.[0]?.message?.content || '! Нет ответа';
-  } catch (err) {
-    results.deepseek = '! Ошибка DeepSeek';
+    results.deepseek = deepseekResponse.data.choices[0].message.content;
+  } catch (error) {
+    results.deepseek = '❌ Ошибка DeepSeek';
   }
 
   return {
