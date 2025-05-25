@@ -59,20 +59,23 @@ try {
     'https://openrouter.ai/api/v1/chat/completions',
     {
       model: 'tngtech/deepseek-r1t-chimera:free',
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: 'Отвечай пользователю по-русски' },
+        { role: 'user', content: prompt }
+      ]
     },
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
         'HTTP-Referer': 'https://ziggi-portal.netlify.app/',
-        'X-Title': 'Ziggi Portal',
-      },
+        'X-Title': 'Ziggi Portal'
+      }
     }
   );
   results.deepseek = deepseekResponse.data.choices[0].message.content;
 } catch (error) {
-  results.deepseek = `❌ Ошибка: ${error.response?.status || ''} ${error.message}`;
+  results.deepseek = `❌ Ошибка: ${error.response?.data?.error?.message || error.message}`;
 }
 
   return {
