@@ -58,7 +58,7 @@ try {
   const deepseekResponse = await axios.post(
     'https://openrouter.ai/api/v1/chat/completions',
     {
-      model: 'deepseek-coder',
+      model: 'tngtech/deepseek-llm-r1t-chimera',
       messages: [{ role: 'user', content: prompt }],
     },
     {
