@@ -4,9 +4,9 @@ exports.handler = async (event) => {
   const { prompt } = JSON.parse(event.body);
 
   const results = {
-    chatgpt: "⛔️ Ошибка ChatGPT",
-    yandexgpt: "⛔️ Ошибка YandexGPT",
-    deepseek: "⛔️ Ошибка DeepSeek"
+    chatgpt: "⛔️ Нет ответа",
+    yandexgpt: "⛔️ Нет ответа",
+    deepseek: "⛔️ Нет ответа"
   };
 
   // ChatGPT
@@ -53,7 +53,7 @@ exports.handler = async (event) => {
     results.yandexgpt = "⚠️ Ошибка YandexGPT";
   }
 
-  // DeepSeek (напрямую)
+  // DeepSeek
   try {
     const deepseekResponse = await fetch("https://api.deepseek.com/v1/chat/completions", {
       method: "POST",
