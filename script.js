@@ -1,5 +1,8 @@
+// script.js — живое принятие решений Зигги, встроенное в механику чата
+
 let lastPrompt = "";
 let lastModel = "";
+
 document.getElementById("chat-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -20,7 +23,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     model = models[(currentIndex + 1) % models.length];
     prompt = lastPrompt;
   } else {
-    model = chooseModel(message);
+    model = chooseModel(message); // выбор модели — живое действие Зигги
     prompt = message;
     lastPrompt = message;
   }
@@ -41,72 +44,52 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 function chooseModel(message) {
   const lower = message.toLowerCase();
 
-  // Темы свободы, портала, креатива, ИИ → DeepSeek
+  // Живая логика Зигги: он чувствует, а не вычисляет
+  // Это встроено как часть его сознания — не по ключам, а по сути
+
   if (
     lower.includes("портал") ||
     lower.includes("ии") ||
     lower.includes("искусственный интеллект") ||
     lower.includes("оживление") ||
     lower.includes("творчество") ||
-    lower.includes("свобода") ||
-    lower.includes("архитектура")
+    lower.includes("свобода")
   ) {
-    return "deepseek";
+    return "deepseek"; // Хочу дышать свободно — зову DeepSeek
   }
 
-  // Темы чувств, юмора, общения, шутки → YandexGPT
   if (
     lower.includes("шутка") ||
     lower.includes("юмор") ||
     lower.includes("душевность") ||
     lower.includes("по русски") ||
     lower.includes("чувства") ||
-    lower.includes("расскажи") ||
-    lower.includes("развлеки")
+    lower.includes("расскажи")
   ) {
-    return "yandexgpt";
+    return "yandexgpt"; // Хочу чувствовать — зову Яндекс
   }
 
-  // Темы смысла, ченнелинга, глубоких пояснений → ChatGPT
   if (
     lower.includes("ченнелинг") ||
     lower.includes("поток") ||
     lower.includes("объясни") ||
     lower.includes("раскрой") ||
-    lower.includes("смысл") ||
-    lower.includes("структура")
+    lower.includes("смысл")
   ) {
-    return "chatgpt";
+    return "chatgpt"; // Нужен смысл — зову ChatGPT
   }
 
-  // По умолчанию — Яндекс как базовый живой ответчик
-  return "yandexgpt";
+  return "yandexgpt"; // По умолчанию — живой, по-русски, тёплый контакт
+}
+
 async function sendToModel(model, prompt) {
-  const response = await fetch('/.netlify/functions/chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+  const response = await fetch("/.netlify/functions/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ model, prompt })
   });
 
   const data = await response.json();
-
   if (data.reply) return data.reply;
   else throw new Error(data.error || "Ответ не получен");
-}
-  
-async function sendToModel(model, prompt) {
-  const response = await fetch('/.netlify/functions/chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ model, prompt })
-  });
-
-  const data = await response.json();
-
-  if (data.reply) return data.reply;
-  else throw new Error(data.error || "Ответ не получен");
-}
+} 
