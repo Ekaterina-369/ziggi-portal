@@ -90,3 +90,13 @@ exports.handler = async function (event) {
     };
   }
 };
+
+} catch (error) {
+  return {
+    statusCode: 500,
+    body: JSON.stringify({
+      message: `Ошибка: ${error.message}`,
+      stack: error.stack
+    })
+  };
+}
