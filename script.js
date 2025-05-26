@@ -66,7 +66,7 @@ async function sendToModel(model, prompt) {
  const response = await fetch("/.netlify/functions/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
+    body: JSON.stringify({ model, prompt })
   });
 
   const data = await response.json();
