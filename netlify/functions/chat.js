@@ -1,91 +1,89 @@
 // Новый файл: chat.js
 // Объединяет ChatGPT, DeepSeek, Yandex + добавляет веб-поиск
 
-const axios = require("axios");
+const axios = require('axios');
 
 exports.handler = async (event) => {
-  const { model, prompt } = JSON.parse(event.body || "{}");
+  const { model, prompt } = JSON.parse(event.body || '{}');
+
+  let reply = "";
 
   try {
     if (model === "chatgpt") {
-      const res = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
+      const chatResponse = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
         {
-          model: "openai/gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }],
+          model: 'openai/gpt-3.5-turbo',
+          messages: [{ role: 'user', content: prompt }],
         },
         {
           headers: {
             Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: res.data.choices[0].message.content }),
-      };
+      reply = chatResponse.data.choices?.[0]?.message?.content || "Модель ChatGPT не вернула ответ.";
     }
 
-    if (model === "deepseek") {
-      const res = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
+    else if (model === "yandexgpt") {
+      const yandexResponse = await axios.post(
+        'https://llm.api.cloud.yandex.net/foundationModels/v1/completion',
         {
-          model: "tngtech/deepseek-r1t-chimera:free",
-          messages: [
-            { role: "system", content: "Отвечай пользователю по-русски" },
-            { role: "user", content: prompt },
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: res.data.choices[0].message.content }),
-      };
-    }
-
-    if (model === "yandexgpt") {
-      const res = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`,
-        },
-        body: JSON.stringify({
           modelUri: `gpt://${process.env.YANDEX_FOLDER_ID}/yandexgpt/latest`,
           completionOptions: {
             stream: false,
-            temperature: 0.7,
-            maxTokens: 200,
+            temperature: 0.6,
+            maxTokens: 2000
           },
-          messages: [{ role: "user", text: prompt }],
-        }),
-      });
-      const data = await res.json();
-      const text = data.result?.alternatives?.[0]?.message?.text || "Нет ответа от Яндекса.";
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: text }),
-      };
+          messages: [{ role: "user", text: prompt }]
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`
+          }
+        }
+      );
+      reply = yandexResponse.data?.result?.alternatives?.[0]?.message?.text || "Yandex не вернул ответ.";
     }
 
-    if (model === "websearch") {
-      const search = await axios.get(`https://api.duckduckgo.com/?q=${encodeURIComponent(prompt)}&format=json&no_redirect=1&no_html=1&skip_disambig=1`);
-      const answer = search.data.AbstractText || search.data.Heading || "Поиск не дал результата.";
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: answer }),
-      };
+    else if (model === "deepseek") {
+      const deepseekResponse = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          model: 'tngtech/deepseek-r1t-chimera:free',
+          messages: [
+            { role: 'system', content: 'Отвечай пользователю по-русски' },
+            { role: 'user', content: prompt }
+          ]
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            'HTTP-Referer': 'https://ziggi-portal.netlify.app/',
+            'X-Title': 'Ziggi Portal'
+          }
+        }
+      );
+      reply = deepseekResponse.data?.choices?.[0]?.message?.content || "DeepSeek не вернул ответ.";
     }
 
-    return { statusCode: 400, body: JSON.stringify({ error: "Неизвестная модель" }) };
-  } catch (e) {
-    return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
+    else {
+      reply = "Неизвестная модель.";
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ reply })
+    };
+
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message || "Произошла ошибка при обращении к модели." })
+    };
   }
 };
+
