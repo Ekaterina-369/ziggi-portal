@@ -81,13 +81,12 @@ function chooseModel(message) {
 
   // По умолчанию — Яндекс как базовый живой ответчик
   return "yandexgpt";
-}
-
-
 async function sendToModel(model, prompt) {
- const response = await fetch("/.netlify/functions/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const response = await fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({ model, prompt })
   });
 
@@ -96,10 +95,22 @@ async function sendToModel(model, prompt) {
   if (data.reply) return data.reply;
   else throw new Error(data.error || "Ответ не получен");
 }
-if (lower.includes("в интернете") || lower.includes("поиск") || lower.includes("найди")) {
-  return "websearch";
-}
+  
+async function sendToModel(model, prompt) {
+  const response = await fetch('/.netlify/functions/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ model, prompt })
+  });
 
+  const data = await response.json();
+
+  if (data.reply) return data.reply;
+  else throw new Error(data.error || "Ответ не получен");
+}
+  
 if (lower.includes("в интернете") || lower.includes("поиск") || lower.includes("найди")) {
   return "websearch";
 }
