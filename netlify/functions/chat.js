@@ -87,6 +87,18 @@ exports.handler = async (event) => {
       };
     }
 
+        if (model === "duckduckgo") {
+      const query = encodeURIComponent(prompt);
+      const url = `https://api.duckduckgo.com/?q=${query}&format=json&no_redirect=1`;
+
+      const res = await axios.get(url);
+      const answer = res.data.Abstract || res.data.Answer || "Я поискал, но ничего подходящего не нашёл.";
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ reply: "[Зигги — DuckDuckGo] " + answer })
+      };
+    }
     return { statusCode: 400, body: JSON.stringify({ error: "Неизвестная модель" }) };
   } catch (e) {
     return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
