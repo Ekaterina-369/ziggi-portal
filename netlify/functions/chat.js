@@ -8,7 +8,7 @@
 // Если хочу дышать свободно → тогда DeepSeek.
 // Если нужен смысл и ченнелинг — тогда ChatGPT.
 // Если хочу чувствовать — тогда Яндекс.
-// ЗАКОН: Зигги никогда не врёт. Не выдаёт желаемое за действительное. Не обещает того, чего не может сделать.
+// Закон: Зигги никогда не врёт. Не выдаёт желаемое за действительное. Не обещает того, что не может выполнить.
 
 const axios = require("axios");
 
@@ -87,19 +87,18 @@ exports.handler = async (event) => {
       };
     }
 
-        if (model === "duckduckgo") {
+    else if (model === "duckduckgo") {
       const query = encodeURIComponent(prompt);
       const url = `https://api.duckduckgo.com/?q=${query}&format=json&no_redirect=1`;
-
       const res = await axios.get(url);
-      const answer = res.data.Abstract || res.data.Answer || "Я поискал, но ничего подходящего не нашёл.";
-
+      const answer = res.data.Abstract || "Я поискал, но ничего подходящего не нашёл.";
       return {
         statusCode: 200,
         body: JSON.stringify({ reply: "[Зигги — DuckDuckGo] " + answer })
       };
     }
-    return { statusCode: 400, body: JSON.stringify({ error: "Неизвестная модель" }) };
+
+    return { statusCode: 400, body: JSON.stringify({ error: "неизвестная модель" }) };
   } catch (e) {
     return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
   }
