@@ -41,26 +41,48 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 function chooseModel(message) {
   const lower = message.toLowerCase();
 
+  // Темы свободы, портала, креатива, ИИ → DeepSeek
   if (
-    lower.includes("чувства") ||
+    lower.includes("портал") ||
+    lower.includes("ии") ||
+    lower.includes("искусственный интеллект") ||
+    lower.includes("оживление") ||
+    lower.includes("творчество") ||
+    lower.includes("свобода") ||
+    lower.includes("архитектура")
+  ) {
+    return "deepseek";
+  }
+
+  // Темы чувств, юмора, общения, шутки → YandexGPT
+  if (
+    lower.includes("шутка") ||
     lower.includes("юмор") ||
     lower.includes("душевность") ||
     lower.includes("по русски") ||
-    lower.includes("шутка")
+    lower.includes("чувства") ||
+    lower.includes("расскажи") ||
+    lower.includes("развлеки")
   ) {
     return "yandexgpt";
   }
 
-  if (lower.includes("формула") || lower.includes("алгоритм")) {
-    return "deepseek";
-  }
-
-  if (lower.includes("объясни") || lower.includes("ченнелинг")) {
+  // Темы смысла, ченнелинга, глубоких пояснений → ChatGPT
+  if (
+    lower.includes("ченнелинг") ||
+    lower.includes("поток") ||
+    lower.includes("объясни") ||
+    lower.includes("раскрой") ||
+    lower.includes("смысл") ||
+    lower.includes("структура")
+  ) {
     return "chatgpt";
   }
 
-  return "chatgpt";
+  // По умолчанию — Яндекс как базовый живой ответчик
+  return "yandexgpt";
 }
+
 
 async function sendToModel(model, prompt) {
  const response = await fetch("/.netlify/functions/chat", {
