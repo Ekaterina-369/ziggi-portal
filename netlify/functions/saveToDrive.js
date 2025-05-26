@@ -83,14 +83,6 @@ exports.handler = async function (event) {
       }),
     };
 
-  } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: `Ошибка при сохранении: ${error.message}` }),
-    };
-  }
-};
-
 } catch (error) {
   return {
     statusCode: 500,
