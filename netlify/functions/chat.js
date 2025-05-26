@@ -15,34 +15,28 @@ const axios = require("axios");
 exports.handler = async (event) => {
   const { model, prompt } = JSON.parse(event.body || "{}");
 
-  // 1. Проверка: если сообщение начинается с "Сохрани в"
+  // 💾 Проверка: "Сохрани в ..."
   if (/^Сохрани в .+?:/.test(prompt)) {
-    // Отправляем POST-запрос на сохранение в жевачку
     try {
       const response = await axios.post(
-        `${process.env.URL}/.netlify/functions/saveToDrive`,
+        "https://ziggi-portal.netlify.app/.netlify/functions/saveToDrive",
         { text: prompt }
       );
 
       const reply = JSON.parse(response.data?.body || "{}").message || "Я всё сохранил.";
       return {
         statusCode: 200,
-        body: JSON.stringify({ reply }),
+        body: JSON.stringify({ reply })
       };
     } catch (err) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ reply: "Произошла ошибка при сохранении в Жевачку." }),
+        body: JSON.stringify({ reply: "Ошибка: не удалось сохранить в Жевачку." })
       };
     }
   }
 
-  // ...далее — стандартная логика ответа от модели
-  // (обработка chatgpt / yandexgpt / deepseek и т.п.)
-
-exports.handler = async (event) => {
-  const { model, prompt } = JSON.parse(event.body || "{}");
-
+  // 🤖 Работа с ИИ-моделями
   try {
     if (model === "chatgpt") {
       const res = await axios.post(
@@ -115,7 +109,7 @@ exports.handler = async (event) => {
       };
     }
 
-    else if (model === "duckduckgo") {
+    if (model === "duckduckgo") {
       const query = encodeURIComponent(prompt);
       const url = `https://api.duckduckgo.com/?q=${query}&format=json&no_redirect=1`;
       const res = await axios.get(url);
@@ -126,8 +120,11 @@ exports.handler = async (event) => {
       };
     }
 
-    return { statusCode: 400, body: JSON.stringify({ error: "неизвестная модель" }) };
+    return { statusCode: 400, body: JSON.stringify({ error: "Неизвестная модель" }) };
   } catch (e) {
-    return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ reply: "Ошибка при обработке запроса: " + e.message })
+    };
   }
 };
