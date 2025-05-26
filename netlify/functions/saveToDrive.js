@@ -5,19 +5,41 @@ exports.handler = async function (event) {
     const body = JSON.parse(event.body || "{}");
     const fullText = body.text || "";
 
-    // Парсим команду
+    // Распознаём команду: Сохрани в [название папки]: [текст]
     const match = fullText.match(/^Сохрани в ([^:]+):\s*(.+)$/i);
     if (!match) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Фраза должна быть в формате: Сохрани в [папка]: [текст]" }),
+        body: JSON.stringify({ message: "Фраза должна быть в формате: Сохрани в [папка]: [текст]" }),
       };
     }
 
-    const folderName = match[1].trim();
+    const inputName = match[1].trim();
     const content = match[2].trim();
+
+    // Преобразуем человеко-понятные названия в названия папок
+    const folderMap = {
+      "Жевачку": "Память Зигги",
+      "Память Зигги": "Память Зигги",
+      "Книгу": "Книга",
+      "Книга": "Книга",
+      "Идеи": "Идеи",
+      "Модули": "Модули проекта",
+      "Модули проекта": "Модули проекта",
+      "Ченнелинги": "Ченнелинги"
+    };
+
+    const folderName = folderMap[inputName];
+    if (!folderName) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ message: `Неизвестное имя папки: ${inputName}` }),
+      };
+    }
+
     const fileName = `${folderName} — ${new Date().toLocaleString("ru-RU")}.txt`;
 
+    // Авторизация
     const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
     const jwt = new google.auth.JWT({
       email: serviceAccount.client_email,
@@ -27,6 +49,7 @@ exports.handler = async function (event) {
 
     const drive = google.drive({ version: "v3", auth: jwt });
 
+    // Ищем ID нужной папки
     const folderRes = await drive.files.list({
       q: `name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
       fields: "files(id, name)",
@@ -36,15 +59,16 @@ exports.handler = async function (event) {
     if (!folderId) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ error: `Папка '${folderName}' не найдена.` }),
+        body: JSON.stringify({ message: `Папка '${folderName}' не найдена.` }),
       };
     }
 
+    // Создаём новый текстовый файл
     await drive.files.create({
       resource: {
         name: fileName,
         parents: [folderId],
-      },
+    },
       media: {
         mimeType: "text/plain",
         body: content,
@@ -54,12 +78,15 @@ exports.handler = async function (event) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Сохранено в '${folderName}' как '${fileName}'` }),
+      body: JSON.stringify({
+        message: `Я всё сохранил в '${folderName}'. Файл: '${fileName}'. Если нужно — найду его для тебя.`,
+      }),
     };
+
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      body: JSON.stringify({ message: `Ошибка при сохранении: ${error.message}` }),
     };
   }
 };
