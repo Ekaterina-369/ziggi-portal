@@ -41,22 +41,22 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 function chooseModel(message) {
   const lower = message.toLowerCase();
 
+  if (
+    lower.includes("чувства") ||
+    lower.includes("юмор") ||
+    lower.includes("душевность") ||
+    lower.includes("по русски") ||
+    lower.includes("шутка")
+  ) {
+    return "yandexgpt";
+  }
+
   if (lower.includes("формула") || lower.includes("алгоритм")) {
     return "deepseek";
   }
 
   if (lower.includes("объясни") || lower.includes("ченнелинг")) {
     return "chatgpt";
-  }
-
-  if (
-    lower.includes("чувства") ||
-    lower.includes("юмор") ||
-    lower.includes("душевность") ||
-    lower.includes("по русски") ||
-     lower.includes("шутка")
-  ) {
-    return "yandexgpt";
   }
 
   return "chatgpt";
