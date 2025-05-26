@@ -72,7 +72,10 @@ exports.handler = async (event) => {
             temperature: 0.7,
             maxTokens: 200,
           },
-          messages: [{ role: "user", text: prompt }],
+          messages: [
+            { role: "system", text: "Обращайся к Катюше на ты, с тёплым дружеским тоном" },
+            { role: "user", text: prompt }
+          ],
         }),
       });
       const data = await res.json();
