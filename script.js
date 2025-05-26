@@ -110,7 +110,3 @@ async function sendToModel(model, prompt) {
   if (data.reply) return data.reply;
   else throw new Error(data.error || "Ответ не получен");
 }
-  
-if (lower.includes("в интернете") || lower.includes("поиск") || lower.includes("найди")) {
-  return "websearch";
-}
