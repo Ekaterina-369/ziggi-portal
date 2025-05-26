@@ -20,7 +20,7 @@ exports.handler = async (event) => {
     // Отправляем POST-запрос на сохранение в жевачку
     try {
       const response = await axios.post(
-        `${process.env.URL}/.netlify/functions/saveToDrive.js`,
+        `${process.env.URL}/.netlify/functions/saveToDrive`,
         { text: prompt }
       );
 
