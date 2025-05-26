@@ -93,3 +93,5 @@ async function sendToModel(model, prompt) {
   if (data.reply) return data.reply;
   else throw new Error(data.error || "Ответ не получен");
 } 
+
+if (lower.includes("найди") || lower.includes("интернет")) return "duckduckgo";
