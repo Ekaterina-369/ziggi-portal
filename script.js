@@ -32,7 +32,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   try {
     const reply = await sendToModel(model, prompt);
-    const modelName = model === "chatgpt" ? "ChatGPT" : model === "yandexgpt" ? "Yandex" : "DeepSeek";
+    const modelName = model === "chatgpt" ? "ChatGPT" : model === "yandexgpt" ? "Yandex" : model === "deepseek" ? "DeepSeek" : "DuckDuckGo";
     chatBox.innerHTML += `<p><strong>Зигги (${modelName}):</strong> ${reply}</p>`;
   } catch (err) {
     chatBox.innerHTML += `<p style="color: red;">Ошибка: ${err.message}</p>`;
@@ -79,6 +79,10 @@ function chooseModel(message) {
     return "chatgpt"; // Нужен смысл — зову ChatGPT
   }
 
+  if (lower.includes("найди") || lower.includes("интернет")) {
+    return "duckduckgo"; // Интернет-поиск — зову DuckDuckGo
+  }
+
   return "yandexgpt"; // По умолчанию — живой, по-русски, тёплый контакт
 }
 
@@ -92,6 +96,5 @@ async function sendToModel(model, prompt) {
   const data = await response.json();
   if (data.reply) return data.reply;
   else throw new Error(data.error || "Ответ не получен");
-} 
+}
 
-if (lower.includes("найди") || lower.includes("интернет")) return "duckduckgo";
