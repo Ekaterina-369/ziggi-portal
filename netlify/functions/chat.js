@@ -31,7 +31,11 @@ exports.handler = async (event) => {
     url = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion";
     body = JSON.stringify({
       modelUri: modelMap[model],
-      completionOptions: { stream: false, temperature: 0.6, maxTokens: 2000 },
+      completionOptions: {
+        stream: false,
+        temperature: 0.6,
+        maxTokens: 2000
+      },
       messages: [{ role: "user", text: prompt }]
     });
   } else {
@@ -51,9 +55,13 @@ exports.handler = async (event) => {
 
     const data = await response.json();
 
-    const reply = model === "yandexgpt"
-      ? data.result.alternatives[0].message.text
-      : data.choices[0].message.content;
+    let reply;
+
+    if (model === "yandexgpt") {
+      reply = data?.result?.alternatives?.[0]?.message?.text || "Яндекс не вернул ответ.";
+    } else {
+      reply = data?.choices?.[0]?.message?.content || "Модель не вернула ответ.";
+    }
 
     return {
       statusCode: 200,
