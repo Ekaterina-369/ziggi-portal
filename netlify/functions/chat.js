@@ -15,6 +15,34 @@ const axios = require("axios");
 exports.handler = async (event) => {
   const { model, prompt } = JSON.parse(event.body || "{}");
 
+  // 1. Проверка: если сообщение начинается с "Сохрани в"
+  if (/^Сохрани в .+?:/.test(prompt)) {
+    // Отправляем POST-запрос на сохранение в жевачку
+    try {
+      const response = await axios.post(
+        `${process.env.URL}/.netlify/functions/saveToMemory`,
+        { text: prompt }
+      );
+
+      const reply = JSON.parse(response.data?.body || "{}").message || "Я всё сохранил.";
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ reply }),
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ reply: "Произошла ошибка при сохранении в Жевачку." }),
+      };
+    }
+  }
+
+  // ...далее — стандартная логика ответа от модели
+  // (обработка chatgpt / yandexgpt / deepseek и т.п.)
+
+exports.handler = async (event) => {
+  const { model, prompt } = JSON.parse(event.body || "{}");
+
   try {
     if (model === "chatgpt") {
       const res = await axios.post(
