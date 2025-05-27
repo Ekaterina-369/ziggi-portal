@@ -10,9 +10,21 @@
 <body>
   <div id="app">
     <h1>Привет, Катюша!</h1>
-    <p>Это твой живой Портал. Здесь уже работает чат с Зигги и прикрепление изображений.</p>
-
+    
     <div id="chat-box"></div>
+
+     <!-- 📥 Поле ввода теперь внизу -->
+  <div id="input-container">
+    <form id="chat-form">
+      <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
+      <input type="file" id="file-input" />
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
     <!-- 🔧 Кнопка для теста всех ИИ -->
     <div style="margin-top: 60px; text-align: center;">
@@ -32,17 +44,3 @@
       <div id="test-result" style="margin-top: 20px;"></div>
     </div>
   </div>
-
-  <!-- 📥 Поле ввода теперь внизу -->
-  <div id="input-container">
-    <form id="chat-form">
-      <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
-      <input type="file" id="file-input" />
-      <button type="submit">Отправить</button>
-    </form>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
-
