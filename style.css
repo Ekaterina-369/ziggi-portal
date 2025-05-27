@@ -70,3 +70,6 @@ h1 {
   color: #111;
 }
 
+#input-container {
+  border-top: 1px solid white;
+}
