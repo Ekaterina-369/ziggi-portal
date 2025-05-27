@@ -36,7 +36,7 @@ exports.handler = async (event) => {
       };
     }
   }
-
+  
   // 🤖 Работа с ИИ-моделями
   try {
     if (model === "chatgpt") {
