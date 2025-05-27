@@ -120,3 +120,38 @@ document.getElementById("check-all").addEventListener("click", async () => {
 
   chatBox.scrollTop = chatBox.scrollHeight;
 });
+
+// ⬇️ Переключатель тест-блока
+document.getElementById("toggle-test").addEventListener("click", () => {
+  const panel = document.getElementById("test-panel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
+});
+
+// ✅ Проверка всех ИИ
+document.getElementById("check-all").addEventListener("click", async () => {
+  const input = document.getElementById("check-input");
+  const question = input.value.trim();
+  if (!question) return;
+
+  const resultDiv = document.getElementById("test-result");
+  resultDiv.innerHTML = `<p><strong>Ты (проверка):</strong> ${question}</p>`;
+
+  try {
+    const response = await fetch("/.netlify/functions/test-all", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: question })
+    });
+
+    const data = await response.json();
+
+    resultDiv.innerHTML += `<p><strong>Зигги (ChatGPT):</strong> ${data.chatgpt || "❌ Нет ответа"}</p>`;
+    resultDiv.innerHTML += `<p><strong>Зигги (YandexGPT):</strong> ${data.yandexgpt || "❌ Нет ответа"}</p>`;
+    resultDiv.innerHTML += `<p><strong>Зигги (DeepSeek):</strong> ${data.deepseek || "❌ Нет ответа"}</p>`;
+  } catch (err) {
+    resultDiv.innerHTML += `<p style="color: red;">Ошибка при проверке всех ИИ: ${err.message}</p>`;
+  }
+
+  resultDiv.scrollTop = resultDiv.scrollHeight;
+});
+
