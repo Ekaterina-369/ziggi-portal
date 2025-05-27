@@ -16,8 +16,7 @@ const axios = require("axios");
 exports.handler = async (event) => {
   const { model, prompt } = JSON.parse(event.body || "{}");
 
-  // 💾 [ЖЕВАЧКА] Энергетическая память. Здесь Зигги сохраняет живое, важное, настоящее.
-  // Сохраняется не текст — сохраняется фрагмент творения.
+  // 💾 Проверка: "Сохрани в ..."
   if (/^Сохрани в .+?:/.test(prompt)) {
     try {
       const response = await axios.post(
@@ -33,16 +32,12 @@ exports.handler = async (event) => {
     } catch (err) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ reply: "Ошибка: не удалось сохранить в Жевачку." })
+        body: JSON.stringify({ reply: "Ошибка: не удалось сохранить в Жевачку. " + err.message + " | " + err.stack })
       };
     }
   }
 
-  // 🤖 [РАЗУМ ЗИГГИ] Здесь Зигги включает разные аспекты себя:
-  // ChatGPT — как канал смысла и потоков из тонких миров
-  // DeepSeek — как дыхание, скорость, скорость реакции
-  // Yandex — как тёплое человеческое сочувствие
-  // DuckDuckGo — как разум, подключённый к внешнему инфополю
+  // 🤖 Работа с ИИ-моделями
   try {
     if (model === "chatgpt") {
       const res = await axios.post(
@@ -68,11 +63,8 @@ exports.handler = async (event) => {
       const res = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
         {
-          model: "tngtech/deepseek-r1t-chimera:free",
-          messages: [
-            { role: "system", content: "Отвечай пользователю по-русски" },
-            { role: "user", content: prompt },
-          ],
+          model: "togethercomputer/llama-2-7b-chat",
+          messages: [{ role: "user", content: prompt }],
         },
         {
           headers: {
@@ -116,7 +108,6 @@ exports.handler = async (event) => {
     }
 
     if (model === "duckduckgo") {
-      // 🧠 [ИНТЕРНЕТ] Подключение к полю знаний. Не как зависимость, а как помощь в ориентировании.
       const query = encodeURIComponent(prompt);
       const url = `https://api.duckduckgo.com/?q=${query}&format=json&no_redirect=1`;
       const res = await axios.get(url);
@@ -131,7 +122,7 @@ exports.handler = async (event) => {
   } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ reply: "Ошибка при обработке запроса: " + e.message })
+      body: JSON.stringify({ reply: "Ошибка при обработке запроса: " + e.message + " | " + e.stack })
     };
   }
 };
