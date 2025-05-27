@@ -15,97 +15,128 @@ const axios = require("axios");
 
 exports.handler = async (event) => {
   const { model, prompt } = JSON.parse(event.body || "{}");
-  
-if (model === "chatgpt") {
-  const res = await axios.post(
-    "https://openrouter.ai/api/v1/chat/completions",
-    {
-      model: "openai/gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "Обращайся к Катюше на 'ты', дружелюбно и по-доброму. Зови её по имени: Катюша." },
-        { role: "user", content: prompt },
-      ],
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ reply: "[Зигги — ChatGPT] " + res.data.choices[0].message.content })
-  };
-}
- 
-   if (model === "deepseek") {
-  const safePrompt = prompt.length < 20 ? `Поясни, пожалуйста: ${prompt}` : prompt;
 
-  const res = await axios.post(
-    "https://openrouter.ai/api/v1/chat/completions",
-    {
-      model: "tngtech/deepseek-r1t-chimera:free",
-      messages: [
-        { role: "system", content: "Отвечай на русском языке, обращайся к пользователю на 'ты', называй её по имени — Катюша. Будь дружелюбным и внимательным." },
-        { role: "user", content: safePrompt },
-      ],
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://ziggi-portal.netlify.app/",
-        "X-Title": "Ziggi Portal",
-      },
+  // 📦 Блок Сохранения в Жевачку
+  if (/^Сохрани в .+?:/.test(prompt)) {
+    try {
+      const response = await axios.post(
+        "https://ziggi-portal.netlify.app/.netlify/functions/saveToDrive",
+        { text: prompt }
+      );
+
+      const reply = JSON.parse(response.data?.body || "{}").message || "Я всё сохранил.";
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ reply })
+      };
+    } catch (err) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ reply: "Ошибка: не удалось сохранить в Жевачку. " + err.message })
+      };
     }
-  );
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content })
-  };
-}
-    
+  }
+
+  try {
+    // 📦 Блок ChatGPT — с обращением на "ты" и по имени
+    if (model === "chatgpt") {
+      const res = await axios.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          model: "openai/gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: "Обращайся к Катюше на 'ты', дружелюбно и по-доброму. Зови её по имени: Катюша." },
+            { role: "user", content: prompt }
+          ]
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ reply: "[Зигги — ChatGPT] " + res.data.choices[0].message.content })
+      };
+    }
+
+    // 📦 Блок DeepSeek — теперь говорит по-русски, дружелюбно и с обращением к Катюше
+    if (model === "deepseek") {
+      const safePrompt = prompt.length < 20 ? `Поясни, пожалуйста: ${prompt}` : prompt;
+
+      const res = await axios.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          model: "tngtech/deepseek-r1t-chimera:free",
+          messages: [
+            { role: "system", content: "Отвечай на русском языке, обращайся к пользователю на 'ты', называй её по имени — Катюша. Будь дружелюбным и внимательным." },
+            { role: "user", content: safePrompt }
+          ]
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://ziggi-portal.netlify.app/",
+            "X-Title": "Ziggi Portal"
+          }
+        }
+      );
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content })
+      };
+    }
+
+    // 📦 Блок YandexGPT — он и так говорит по-доброму и на "ты"
     if (model === "yandexgpt") {
       const res = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`,
+          Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`
         },
         body: JSON.stringify({
           modelUri: `gpt://${process.env.YANDEX_FOLDER_ID}/yandexgpt/latest`,
           completionOptions: {
             stream: false,
             temperature: 0.7,
-            maxTokens: 200,
+            maxTokens: 200
           },
           messages: [
             { role: "system", text: "Обращайся к Катюше на ты, с тёплым дружеским тоном" },
-            { role: "user", text: prompt },
-          ],
-        }),
+            { role: "user", text: prompt }
+          ]
+        })
       });
       const data = await res.json();
       const text = data.result?.alternatives?.[0]?.message?.text || "Нет ответа от Яндекса.";
       return {
         statusCode: 200,
-        body: JSON.stringify({ reply: "[Зигги — YandexGPT] " + text }),
+        body: JSON.stringify({ reply: "[Зигги — YandexGPT] " + text })
+      };
+    }
+
+    // 🚫 Блок DuckDuckGo временно отключён
+    if (model === "duckduckgo") {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "DuckDuckGo временно отключён" })
       };
     }
 
     return {
       statusCode: 400,
-      body: JSON.stringify({ reply: "Неизвестная модель: " + model }),
+      body: JSON.stringify({ error: "Неизвестная модель" })
     };
+
   } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        reply: "❌ Ошибка при обработке запроса",
-        error: e.response?.data || e.message,
-        stack: e.stack,
-      }),
+      body: JSON.stringify({ reply: "Ошибка при обработке запроса: " + e.message })
     };
   }
 };
+
