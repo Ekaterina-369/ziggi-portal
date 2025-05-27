@@ -37,31 +37,35 @@ exports.handler = async (event) => {
       };
     }
 
-    if (model === "deepseek") {
-      const res = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-          model: "tngtech/deepseek-r1t-chimera:free",
-          messages: [
-            { role: "system", content: "Отвечай пользователю по-русски" },
-            { role: "user", content: prompt },
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://ziggi-portal.netlify.app/",
-            "X-Title": "Ziggi Portal",
-          },
-        }
-      );
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content }),
-      };
-    }
+   if (model === "deepseek") {
+  const safePrompt = prompt.length < 20
+    ? `Поясни, пожалуйста: ${prompt}`
+    : prompt;
 
+  const res = await axios.post(
+    "https://openrouter.ai/api/v1/chat/completions",
+    {
+      model: "tngtech/deepseek-r1t-chimera:free",
+      messages: [
+        { role: "system", content: "Ты — дружелюбный помощник. Отвечай пользователю по-русски, ясно и конкретно." },
+        { role: "user", content: safePrompt },
+      ],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://ziggi-portal.netlify.app/",
+        "X-Title": "Ziggi Portal",
+      },
+    }
+  );
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content }),
+  };
+}
+    
     if (model === "yandexgpt") {
       const res = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
         method: "POST",
