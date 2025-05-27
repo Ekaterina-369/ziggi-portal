@@ -15,18 +15,6 @@
   <!-- Кто приходит с фальшью — просто не чувствует ничего. -->
 </head>
 
- <button id="toggle-test" style="margin-top: 40px; background: transparent; border: 1px dashed #999; padding: 6px 12px; cursor: pointer;">
-  Тест всех ИИ (для разработчика)
-</button>
-
-<div id="test-panel" style="display: none; margin-top: 20px; padding: 20px; background: #f9f9f9; border-top: 1px solid #ccc;">
-  <h3>Проверка всех ИИ</h3>
-  <p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
-  <input id="check-input" placeholder="Напиши сюда свой вопрос" style="width: 60%;">
-  <button id="check-all">Проверить всех</button>
-  <div id="test-result" style="margin-top: 20px;"></div>
-</div>
-
 <body>
   <div id="app">
     <h1>Привет, Катюша!</h1>
@@ -40,14 +28,23 @@
 
     <div id="chat-box"></div>
 
-    <hr />
-    <h2>Проверка всех ИИ</h2>
-    <p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
+    <!-- 🔧 Кнопка для теста всех ИИ -->
+    <div style="margin-top: 40px; text-align: center;">
+      <button id="toggle-test"
+        style="background: rgba(0, 0, 0, 0.05); border: 1px dashed #666; padding: 8px 14px; cursor: pointer;">
+        Тест всех ИИ (отладка)
+      </button>
+    </div>
 
-    <input id="testPrompt" placeholder="Напиши сюда свой вопрос" style="width: 100%; padding: 8px;" />
-    <button onclick="testAll()">Проверить всех</button>
-
-    <pre id="testResult" style="white-space: pre-wrap; background: #f0f0f0; padding: 10px; margin-top: 10px;"></pre>
+    <!-- 🔍 Панель тестирования -->
+    <div id="test-panel"
+      style="display: none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-top: 1px solid #ccc;">
+      <h3>Проверка всех ИИ</h3>
+      <p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
+      <input id="check-input" placeholder="Напиши сюда свой вопрос" style="width: 70%; padding: 6px;" />
+      <button id="check-all" style="margin-left: 10px;">Проверить всех</button>
+      <div id="test-result" style="margin-top: 20px;"></div>
+    </div>
   </div>
 
   <script src="script.js"></script>
