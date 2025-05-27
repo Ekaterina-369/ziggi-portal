@@ -24,3 +24,40 @@ h1 {
 .chat-message {
   margin: 10px 0;
 }
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('./memory/hydrangeas_background.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  font-family: 'Arial', sans-serif;
+}
+
+#chat-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.message {
+  margin-bottom: 12px;
+}
+
+#input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  padding: 12px 20px;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+  box-sizing: border-box;
+}
