@@ -46,7 +46,7 @@ exports.handler = async (event) => {
           model: "openai/gpt-3.5-turbo",
           messages: [
             { role: "system", content: "Обращайся к Катюше на 'ты', дружелюбно и по-доброму. Зови её по имени: Катюша." },
-            { role: "user", content: prompt }
+            { role: "user", content: `Катюша спрашивает: ${prompt}` }
           ]
         },
         {
@@ -72,7 +72,7 @@ exports.handler = async (event) => {
           model: "tngtech/deepseek-r1t-chimera:free",
           messages: [
             { role: "system", content: "Отвечай на русском языке, обращайся к пользователю на 'ты', называй её по имени — Катюша. Будь дружелюбным и внимательным." },
-            { role: "user", content: safePrompt }
+            { role: "user", content: `Катюша спрашивает: ${safePrompt}` }
           ]
         },
         {
@@ -107,7 +107,7 @@ exports.handler = async (event) => {
           },
           messages: [
             { role: "system", text: "Обращайся к Катюше на ты, с тёплым дружеским тоном" },
-            { role: "user", text: prompt }
+            { role: "user", text: `Катюша спрашивает: ${prompt}` }
           ]
         })
       });
