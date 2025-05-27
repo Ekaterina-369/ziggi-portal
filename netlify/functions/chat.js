@@ -71,7 +71,7 @@ exports.handler = async (event) => {
         {
           model: "tngtech/deepseek-r1t-chimera:free",
           messages: [
-            { role: "system", content: "Отвечай на русском языке, обращайся к пользователю на 'ты', называй её по имени — Катюша. Будь дружелюбным и внимательным." },
+            { role: "system", content: "Говори на русском, дружелюбно, на ты. Обращайся к Катюше по имени." }
             { role: "user", content: `Катюша спрашивает: ${safePrompt}` }
           ]
         },
