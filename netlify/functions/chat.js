@@ -60,24 +60,25 @@ exports.handler = async (event) => {
     }
 
     if (model === "deepseek") {
-      const res = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-          model: "togethercomputer/llama-2-7b-chat",
-          messages: [{ role: "user", content: prompt }],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content })
-      };
+  const res = await axios.post(
+    "https://openrouter.ai/api/v1/chat/completions",
+    {
+      model: "deepseek-chat", // ✅ ЭТО ТОЧНОЕ НАЗВАНИЕ
+      messages: [{ role: "user", content: prompt }],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://ziggi-portal.netlify.app", // ОБЯЗАТЕЛЕН!
+      },
     }
+  );
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content })
+  };
+}
 
     if (model === "yandexgpt") {
       const res = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
