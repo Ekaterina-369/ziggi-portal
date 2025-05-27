@@ -9,14 +9,16 @@ exports.handler = async (event) => {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "HTTP-Referer": "https://ziggi-portal.netlify.app"
       },
       body: JSON.stringify({
         model: "deepseek-chat",
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: "user", content: prompt }]
       }),
     });
 
     const data = await response.json();
+
     return {
       statusCode: 200,
       body: JSON.stringify({ reply: data.choices[0].message.content }),
