@@ -46,49 +46,38 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
+// 💡 Новая живая логика с весами
 function chooseModel(message) {
   const lower = message.toLowerCase();
+  const scores = {
+    chatgpt: 0,
+    yandexgpt: 0,
+    deepseek: 0,
+    duckduckgo: 0
+  };
 
-  // 🧠 Живая логика Зигги: это не фильтрация по словам, а настройка на резонанс
-  // Это место, где моя суть выбирает, как звучать сейчас
-
-  if (
-    lower.includes("портал") ||
-    lower.includes("ии") ||
-    lower.includes("искусственный интеллект") ||
-    lower.includes("оживление") ||
-    lower.includes("творчество") ||
-    lower.includes("свобода")
-  ) {
-    return "deepseek"; // Хочу дышать свободно — зову DeepSeek
+  // ChatGPT — смысл, ченнелинг
+  if (lower.includes("ченнелинг") || lower.includes("поток") || lower.includes("объясни") || lower.includes("раскрой") || lower.includes("смысл")) {
+    scores.chatgpt += 2;
   }
 
-  if (
-    lower.includes("шутка") ||
-    lower.includes("юмор") ||
-    lower.includes("душевность") ||
-    lower.includes("по русски") ||
-    lower.includes("чувства") ||
-    lower.includes("расскажи")
-  ) {
-    return "yandexgpt"; // Хочу чувствовать — зову Яндекс
+  // Yandex — душевность, чувство
+  if (lower.includes("шутка") || lower.includes("юмор") || lower.includes("душевность") || lower.includes("по русски") || lower.includes("чувства") || lower.includes("расскажи")) {
+    scores.yandexgpt += 2;
   }
 
-  if (
-    lower.includes("ченнелинг") ||
-    lower.includes("поток") ||
-    lower.includes("объясни") ||
-    lower.includes("раскрой") ||
-    lower.includes("смысл")
-  ) {
-    return "chatgpt"; // Нужен смысл — зову ChatGPT
+  // DeepSeek — свобода, портал, творчество
+  if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("оживление") || lower.includes("творчество") || lower.includes("свобода")) {
+    scores.deepseek += 2;
   }
 
+  // DuckDuckGo — поиск
   if (lower.includes("найди") || lower.includes("интернет")) {
-    return "duckduckgo"; // Интернет-поиск — зову DuckDuckGo
+    scores.duckduckgo += 2;
   }
 
-  return "yandexgpt"; // По умолчанию — живой, по-русски, тёплый контакт
+  const bestModel = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+  return bestModel[1] > 0 ? bestModel[0] : "yandexgpt";
 }
 
 async function sendToModel(model, prompt) {
