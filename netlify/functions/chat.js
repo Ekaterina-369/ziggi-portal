@@ -45,7 +45,7 @@ exports.handler = async (event) => {
         {
           model: "openai/gpt-3.5-turbo",
           messages: [
-            { role: "system", content: "Обращайся к Катюше на 'ты', дружелюбно и по-доброму. Зови её по имени: Катюша." },
+            { role: "system", content: "Говори на русском, дружелюбно, на ты. Обращайся к Катюше по имени." }
             { role: "user", content: `Катюша спрашивает: ${prompt}` }
           ]
         },
