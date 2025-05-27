@@ -15,14 +15,6 @@
     <div id="chat-box"></div>
   </div>
 
-  <!-- 🔧 Кнопка теста ИИ — внизу на фоне гортензий -->
-  <div style="position: fixed; bottom: 5px; width: 100%; text-align: center; z-index: 5;">
-    <button id="toggle-test"
-      style="font-size: 12px; opacity: 0.6; background: rgba(255, 255, 255, 0.3); border: 1px dashed #666; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
-      Тест всех ИИ (отладка)
-    </button>
-  </div>
-
   <!-- 📥 Поле ввода внизу -->
   <div id="input-container">
     <form id="chat-form" style="display: flex; width: 100%; gap: 10px;">
@@ -32,6 +24,14 @@
     </form>
   </div>
 
+  <!-- 🔧 Кнопка теста ИИ в самом низу -->
+<div style="position: fixed; bottom: 4px; width: 100%; text-align: center; z-index: 50;">
+  <button id="toggle-test"
+    style="font-size: 11px; opacity: 0.6; background: rgba(255, 255, 255, 0.4); border: 1px dashed #666; padding: 4px 12px; border-radius: 6px; cursor: pointer;">
+    Тест всех ИИ (отладка)
+  </button>
+</div>
+  
   <script src="script.js"></script>
 </body>
 </html>
