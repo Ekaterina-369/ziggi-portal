@@ -92,10 +92,11 @@ exports.handler = async (event) => {
 
     return { statusCode: 400, body: JSON.stringify({ error: "Неизвестная модель" }) };
   } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ reply: "Ошибка при обработке запроса: " + e.message + " | " + e.stack }),
-    };
-  }
+   return {
+  statusCode: 500,
+  body: JSON.stringify({ 
+    reply: "❌ Ошибка 500",
+    error: e.response?.data || e.message,
+    stack: e.stack
+  })
 };
-
