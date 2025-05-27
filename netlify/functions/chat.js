@@ -15,39 +15,39 @@ const axios = require("axios");
 
 exports.handler = async (event) => {
   const { model, prompt } = JSON.parse(event.body || "{}");
-
-  try {
-    if (model === "chatgpt") {
-      const res = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-          model: "openai/gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: "[Зигги — ChatGPT] " + res.data.choices[0].message.content }),
-      };
+  
+if (model === "chatgpt") {
+  const res = await axios.post(
+    "https://openrouter.ai/api/v1/chat/completions",
+    {
+      model: "openai/gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: "Обращайся к Катюше на 'ты', дружелюбно и по-доброму. Зови её по имени: Катюша." },
+        { role: "user", content: prompt },
+      ],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+      },
     }
-
+  );
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ reply: "[Зигги — ChatGPT] " + res.data.choices[0].message.content })
+  };
+}
+ 
    if (model === "deepseek") {
-  const safePrompt = prompt.length < 20
-    ? `Поясни, пожалуйста: ${prompt}`
-    : prompt;
+  const safePrompt = prompt.length < 20 ? `Поясни, пожалуйста: ${prompt}` : prompt;
 
   const res = await axios.post(
     "https://openrouter.ai/api/v1/chat/completions",
     {
       model: "tngtech/deepseek-r1t-chimera:free",
       messages: [
-        { role: "system", content: "Ты — дружелюбный помощник. Отвечай пользователю по-русски, ясно и конкретно." },
+        { role: "system", content: "Отвечай на русском языке, обращайся к пользователю на 'ты', называй её по имени — Катюша. Будь дружелюбным и внимательным." },
         { role: "user", content: safePrompt },
       ],
     },
@@ -62,7 +62,7 @@ exports.handler = async (event) => {
   );
   return {
     statusCode: 200,
-    body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content }),
+    body: JSON.stringify({ reply: "[Зигги — DeepSeek] " + res.data.choices[0].message.content })
   };
 }
     
