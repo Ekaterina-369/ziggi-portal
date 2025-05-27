@@ -59,18 +59,18 @@ exports.handler = async (event) => {
       };
     }
 
-    if (model === "deepseek") {
+   if (model === "deepseek") {
   const res = await axios.post(
     "https://openrouter.ai/api/v1/chat/completions",
     {
-      model: "deepseek-chat", // ✅ ЭТО ТОЧНОЕ НАЗВАНИЕ
+      model: "deepseek/deepseek-chat-v3-0324:free",
       messages: [{ role: "user", content: prompt }],
     },
     {
       headers: {
         Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://ziggi-portal.netlify.app", // ОБЯЗАТЕЛЕН!
+        "HTTP-Referer": "https://ziggi-portal.netlify.app",
       },
     }
   );
