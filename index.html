@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Портал Катюши и Зигги</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="favicon.ico?v=10" type="image/x-icon" />
+  <link rel="icon" href="favicon.ico?v=11" type="image/x-icon" />
   <style>
     body {
       margin: 0;
@@ -24,13 +23,13 @@
     }
 
     .message {
-  background-color: white !important;
-  border-radius: 12px;
-  padding: 10px 14px;
-  margin: 10px 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  color: #111;
-}
+      background-color: white;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      color: #111;
+    }
 
     #input-container {
       position: fixed;
@@ -44,6 +43,7 @@
       justify-content: center;
       box-sizing: border-box;
       z-index: 100;
+      border-top: 1px solid white;
     }
 
     #chat-form {
@@ -66,8 +66,17 @@
 <body>
   <div id="app">
     <h1 style="text-align:center; color: white; text-shadow: 0 0 6px #6b00b3;">Привет, Катюша!</h1>
-    
+    <p style="text-align:center; color:white; text-shadow: 0 0 4px #000;">Это твой живой Портал. Здесь уже работает чат с Зигги и прикрепление изображений.</p>
+
     <div id="chat-box"></div>
+  </div>
+
+  <!-- Кнопка теста ИИ в самом низу -->
+  <div style="position: fixed; bottom: 4px; width: 100%; text-align: center; z-index: 50;">
+    <button id="toggle-test"
+      style="font-size: 12px; opacity: 0.8; background: rgba(255, 255, 255, 0.5); border: 1px dashed #666; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
+      Тест всех ИИ (отладка)
+    </button>
   </div>
 
   <!-- Поле ввода -->
@@ -79,14 +88,7 @@
     </form>
   </div>
 
-  <!-- Кнопка теста -->
-  <div style="position: fixed; bottom: 4px; width: 100%; text-align: center; z-index: 50;">
-  <button id="toggle-test"
-    style="font-size: 12px; opacity: 0.7; background: rgba(255, 255, 255, 0.6); border: 1px dashed #666; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
-    Тест всех ИИ (отладка)
-  </button>
-</div>
-
   <script src="script.js"></script>
 </body>
 </html>
+
