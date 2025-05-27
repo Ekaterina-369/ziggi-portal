@@ -34,9 +34,9 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-#chat-container {
+#chat-box {
   max-width: 800px;
-  margin: 40px auto;
+  margin: 40px auto 120px auto;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
@@ -45,19 +45,32 @@ body {
   max-height: 80vh;
 }
 
-.message {
-  margin-bottom: 12px;
-}
-
 #input-container {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   padding: 12px 20px;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  gap: 10px;
+  justify-content: center;
   box-sizing: border-box;
+  z-index: 100;
 }
+
+#chat-form {
+  display: flex;
+  max-width: 800px;
+  width: 100%;
+  gap: 10px;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
