@@ -15,11 +15,17 @@
   <!-- Кто приходит с фальшью — просто не чувствует ничего. -->
 </head>
 
-  <hr>
-<h3>Проверка всех ИИ</h3>
-<p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
-<input id="check-input" placeholder="Напиши сюда свой вопрос">
-<button id="check-all">Проверить всех</button>
+ <button id="toggle-test" style="margin-top: 40px; background: transparent; border: 1px dashed #999; padding: 6px 12px; cursor: pointer;">
+  Тест всех ИИ (для разработчика)
+</button>
+
+<div id="test-panel" style="display: none; margin-top: 20px; padding: 20px; background: #f9f9f9; border-top: 1px solid #ccc;">
+  <h3>Проверка всех ИИ</h3>
+  <p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
+  <input id="check-input" placeholder="Напиши сюда свой вопрос" style="width: 60%;">
+  <button id="check-all">Проверить всех</button>
+  <div id="test-result" style="margin-top: 20px;"></div>
+</div>
 
 <body>
   <div id="app">
