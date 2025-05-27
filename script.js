@@ -155,3 +155,12 @@ document.getElementById("check-all").addEventListener("click", async () => {
   resultDiv.scrollTop = resultDiv.scrollHeight;
 });
 
+function scrollToBottom() {
+  const chatContainer = document.getElementById("chat-container");
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function sendMessage() {
+  // ...твоя логика отправки...
+  scrollToBottom(); // добавляем прокрутку вниз после ответа
+}
