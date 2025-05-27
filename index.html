@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Портал Катюши и Зигги</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="favicon.ico?v=1" type="image/x-icon" />
+  <link rel="icon" href="favicon.ico?v=3" type="image/x-icon" />
 </head>
 
 <body>
@@ -13,19 +13,25 @@
     <h1>Привет, Катюша!</h1>
     
     <div id="chat-box"></div>
+  </div>
 
-    <!-- 📥 Поле ввода теперь внизу -->
-    <div id="input-container">
-      <form id="chat-form">
-        <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
-        <input type="file" id="file-input" />
-        <button type="submit">Отправить</button>
-      </form>
-    </div>
+  <!-- 🔧 Кнопка теста ИИ — внизу на фоне гортензий -->
+  <div style="position: fixed; bottom: 5px; width: 100%; text-align: center; z-index: 5;">
+    <button id="toggle-test"
+      style="font-size: 12px; opacity: 0.6; background: rgba(255, 255, 255, 0.3); border: 1px dashed #666; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
+      Тест всех ИИ (отладка)
+    </button>
+  </div>
 
-    <!-- 🔍 Панель тестирования -->
-    <div id="test-panel"
-      style="display: none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-top: 1px solid #ccc;">
-      <h3>Проверка всех ИИ</h3>
-      <p>Введи вопрос и нажми кнопку — проверим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
-      <input id="check-input" placeholder="Напиши сюда свой вопрос" style="width
+  <!-- 📥 Поле ввода внизу -->
+  <div id="input-container">
+    <form id="chat-form" style="display: flex; width: 100%; gap: 10px;">
+      <input type="text" id="chat-input" placeholder="Напиши Зигги..." style="flex: 1;" />
+      <input type="file" id="file-input" />
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
