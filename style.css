@@ -1,48 +1,35 @@
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f4f8;
-  margin: 0;
-  padding: 20px;
-}
-#app {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-h1 {
-  color: #553c9a;
-}
-#chat-box {
-  margin-top: 20px;
-  border-top: 1px solid #ccc;
-  padding-top: 10px;
-}
-.chat-message {
-  margin: 10px 0;
-}
-body {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
   background-image: url('./memory/hydrangeas_background.jpg');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
-  font-family: 'Arial', sans-serif;
+}
+
+#app {
+  max-width: 100%;
+  margin: 0 auto;
+  padding-top: 40px;
+  text-align: center;
+}
+
+h1 {
+  color: #553c9a;
 }
 
 #chat-box {
   max-width: 600px;
-  margin: 40px auto 120px auto;
-  background-color: rgba(255, 255, 255, 0.7); /* почти прозрачное */
+  margin: 20px auto 120px auto;
+  background-color: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.2);
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
   padding: 20px;
   overflow-y: auto;
   max-height: 75vh;
+  text-align: left;
 }
 
 #input-container {
