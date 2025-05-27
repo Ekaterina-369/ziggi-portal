@@ -37,7 +37,7 @@ body {
 #chat-box {
   max-width: 800px;
   margin: 40px auto 120px auto;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.75); /* ← почти прозрачное */
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
   padding: 20px;
