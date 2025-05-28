@@ -1,14 +1,15 @@
-
+/* 🌺 Основной фон всей страницы с гортензиями */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-image: url('./memory/hydrangeas_background.jpg');
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
+  background-image: url('./memory/hydrangeas_background.jpg'); /* фоновая картинка */
+  background-size: cover; /* чтобы картинка покрывала весь экран */
+  background-attachment: fixed; /* фон не прокручивается при скролле */
+  background-position: center; /* фон по центру */
 }
 
+/* 🌼 Общий контейнер для всего приложения */
 #app {
   max-width: 100%;
   margin: 0 auto;
@@ -16,43 +17,60 @@ body {
   text-align: center;
 }
 
+/* 🌸 Заголовок страницы (если он есть) */
 h1 {
   color: #553c9a;
+  text-shadow: 0 0 5px rgba(0,0,0,0.3); /* лёгкая тень, чтобы читался */
 }
 
+/* 💬 Контейнер с сообщениями чата */
 #chat-box {
   max-width: 600px;
-  margin: 20px auto 120px auto;
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 20px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  margin: 20px auto 120px auto; /* отступы сверху и снизу */
+  background-color: rgba(255, 255, 255, 0.85); /* почти белый, но с прозрачностью */
+  border-radius: 20px; /* скругление углов */
+  box-shadow: 0 0 25px rgba(0,0,0,0.15); /* лёгкая тень */
   padding: 20px;
-  overflow-y: auto;
-  max-height: 75vh;
-  text-align: left;
+  overflow-y: auto; /* если много сообщений — можно скроллить */
+  max-height: 75vh; /* ограничение по высоте */
+  text-align: left; /* текст в сообщениях выравнивается по левому краю */
 }
 
+/* 🧾 Отдельное сообщение в чате */
+.message {
+  background-color: white !important; /* фон сообщений — белый */
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  color: #111; /* цвет текста — почти чёрный */
+}
+
+/* 📥 Нижняя панель ввода сообщения */
 #input-container {
-  position: fixed;
+  position: fixed; /* закреплена внизу экрана */
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.95); /* почти белый фон */
   padding: 12px 20px;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* лёгкая тень сверху */
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  z-index: 100;
+  z-index: 100; /* чтобы поверх других элементов */
+  border-top: 1px solid white;
 }
 
+/* 📝 Контейнер формы отправки */
 #chat-form {
   display: flex;
   max-width: 800px;
   width: 100%;
-  gap: 10px;
+  gap: 10px; /* расстояние между полем ввода и кнопкой */
 }
 
+/* ⌨️ Поле ввода сообщения */
 #chat-input {
   flex: 1;
   padding: 10px;
@@ -61,15 +79,28 @@ h1 {
   border: 1px solid #ccc;
 }
 
-.message {
-  background-color: white !important;
-  border-radius: 12px;
-  padding: 10px 14px;
-  margin: 10px 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  color: #111;
+/* 🤖 Кнопка теста всех ИИ */
+#toggle-test {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  font-size: 12px;
+  border: 1px solid #888;
+  padding: 6px 12px;
+  border-radius: 10px 10px 0 0;
+  z-index: 50;
+  opacity: 0.8; /* немного прозрачная */
 }
 
-#input-container {
-  border-top: 1px solid white;
+/* ⚙️ Панель с результатами теста ИИ */
+#test-panel {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 700px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
