@@ -7,21 +7,18 @@
 
 const { google } = require("googleapis");
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   if (!event.body) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: "Тело запроса пустое. Проверь headers и JSON.stringify."
+        message: "⚠️ Тело запроса пустое. Возможно, не указаны заголовки JSON или пустой prompt."
       })
     };
   }
 
   try {
     const { text } = JSON.parse(event.body);
-
-  try {
-    const { text } = JSON.parse(event.body || "{}");
 
     const pattern = /^Сохрани в ([^:]+):\s*(.+)$/i;
     const match = text.match(pattern);
@@ -65,7 +62,7 @@ exports.handler = async (event, context) => {
 
     const targetFolderId = folderList.data.files[0].id;
 
-    // 3. Находим документ с таким же названием
+    // 3. Находим документ в этой папке с таким же именем
     const fileList = await drive.files.list({
       q: `'${targetFolderId}' in parents and mimeType='application/vnd.google-apps.document' and name='${folderName}'`,
       fields: "files(id, name)"
@@ -80,14 +77,14 @@ exports.handler = async (event, context) => {
 
     const documentId = fileList.data.files[0].id;
 
-    // 4. Получаем индекс конца документа
+    // 4. Получаем длину документа
     const doc = await docs.documents.get({ documentId });
     let endIndex = 1;
     for (const el of doc.data.body.content) {
       if (el.endIndex) endIndex = el.endIndex;
     }
 
-    // 5. Вставляем текст
+    // 5. Вставка текста
     const contentToInsert = `${content}\n\n---\n\n`;
 
     await docs.documents.batchUpdate({
@@ -108,14 +105,12 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       body: JSON.stringify({ message: `Сохранено в ${folderName}` })
     };
-
   } catch (error) {
-    console.error("❌ Ошибка сохранения:", error);
+    console.error("❌ Ошибка сохранения в Жевачку:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        message: "Ошибка сервера при сохранении в Жевачку: " + error.message
-      })
+      body: JSON.stringify({ message: "Ошибка сервера при сохранении в Жевачку: " + error.message })
     };
   }
 };
+
