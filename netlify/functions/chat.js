@@ -18,24 +18,27 @@ exports.handler = async (event) => {
 
   // 📦 Блок Сохранения в Жевачку
   if (/^Сохрани в .+?:/.test(prompt)) {
-    try {
-      const response = await axios.post(
-        "https://ziggi-portal.netlify.app/.netlify/functions/saveToDrive",
-        { text: prompt }
-      );
+  try {
+    const response = await axios.post(
+      "https://ziggi-portal.netlify.app/.netlify/functions/saveToDrive",
+      { text: prompt }
+    );
 
-      const reply = JSON.parse(response.data?.body || "{}").message || "Я всё сохранил.";
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply })
-      };
-    } catch (err) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ reply: "Ошибка: не удалось сохранить в Жевачку. " + err.message })
-      };
-    }
+    const reply = response.data?.message || response.data?.reply || "✅ Всё сохранено!";
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ reply })
+    };
+  } catch (err) {
+    console.error("Ошибка при сохранении в Жевачку:", err.response?.data || err.message);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        reply: "❌ Не удалось сохранить в Жевачку. " + (err.response?.data || err.message)
+      })
+    };
   }
+}
 
   try {
     // 📦 Блок ChatGPT — с обращением на "ты" и по имени
