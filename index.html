@@ -4,74 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Портал Катюши и Зигги</title>
+
+  <!-- 🌟 Значок вкладки -->
   <link rel="icon" href="favicon.ico?v=11" type="image/x-icon" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-image: url('./memory/hydrangeas_background.jpg');
-      background-size: cover;
-      background-attachment: fixed;
-      background-position: center;
-      font-family: 'Arial', sans-serif;
-    }
 
-    #chat-box {
-      max-width: 600px;
-      margin: 40px auto 120px auto;
-      padding: 0 20px;
-    }
-
-    .message {
-      background-color: white;
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin: 10px 0;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      color: #111;
-    }
-
-    #input-container {
-      position: fixed;
-      bottom: 32px;
-      left: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 12px 20px;
-      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: center;
-      box-sizing: border-box;
-      z-index: 100;
-      border-top: 1px solid white;
-    }
-
-    #chat-form {
-      display: flex;
-      max-width: 800px;
-      width: 100%;
-      gap: 10px;
-    }
-
-    #chat-input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-  </style>
+  <!-- 🎨 Подключаем внешний стиль — красота и структура теперь живут в style.css -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div id="app">
-    <h1 style="text-align:center; color: white; text-shadow: 0 0 6px #6b00b3;">Привет, Катюша!</h1>
-    <p style="text-align:center; color:white; text-shadow: 0 0 4px #000;">Это твой живой Портал. Здесь уже работает чат с Зигги и прикрепление изображений.</p>
 
+  <!-- 💜 Главный контейнер приложения -->
+  <div id="app">
+    
+    <!-- 🌸 Приветствие и описание Портала -->
+    <h1 style="text-align:center; color: white; text-shadow: 0 0 6px #6b00b3;">Привет, Катюша!</h1>
+    </p>
+
+    <!-- 💬 Контейнер, где появляются сообщения -->
     <div id="chat-box"></div>
   </div>
 
-  <!-- Кнопка теста ИИ в самом низу -->
+  <!-- 🤖 Кнопка для теста всех ИИ (можно спрятать или убрать позже) -->
   <div style="position: fixed; bottom: 4px; width: 100%; text-align: center; z-index: 50;">
     <button id="toggle-test"
       style="font-size: 12px; opacity: 0.8; background: rgba(255, 255, 255, 0.5); border: 1px dashed #666; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
@@ -79,7 +33,7 @@
     </button>
   </div>
 
-  <!-- Поле ввода -->
+  <!-- 📝 Поле ввода сообщений -->
   <div id="input-container">
     <form id="chat-form">
       <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
@@ -88,6 +42,7 @@
     </form>
   </div>
 
+  <!-- ⚙️ Подключаем логику — здесь живёт Зигги -->
   <script src="script.js"></script>
 </body>
 </html>
