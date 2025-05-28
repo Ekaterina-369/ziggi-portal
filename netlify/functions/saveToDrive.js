@@ -54,27 +54,27 @@ exports.handler = async function (event) {
 
     const drive = google.drive({ version: "v3", auth: jwt });
 
-    // 🔗 Жестко задаем ID главной папки "Жевачка"
-    const rootId = "1wnJOfy5M78g5OTinexy2JddjG0I1LvEs";
+    const rootId = "1wnJOfy5M78g5OTiney2JddjG0l1LvEs"; // ← ТВОЙ ТОЧНЫЙ ID
 
-    // 🗂 Ищем вложенную папку
+    // 🔍 Смотрим, какие папки видны внутри "Жевачка"
     const folderRes = await drive.files.list({
-      q: `'${rootId}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+      q: `'${rootId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
       fields: "files(id, name)"
     });
 
-    console.log("folderRes", folderRes.data.files);
+    const visibleFolders = folderRes.data.files.map(f => f.name).join(", ");
+    console.log("🔥 Папки внутри 'Жевачка':", visibleFolders);
 
-    const folderId = folderRes.data.files[0]?.id;
-
-    if (!folderId) {
+    const folderMatch = folderRes.data.files.find(f => f.name === folderName);
+    if (!folderMatch) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ message: `Папка '${folderName}' внутри 'Жевачка' не найдена.` }),
+        body: JSON.stringify({ message: `Папка '${folderName}' внутри 'Жевачка' не найдена. Видны только: ${visibleFolders}` }),
       };
     }
 
-    // 📝 Создаем файл
+    const folderId = folderMatch.id;
+
     await drive.files.create({
       resource: {
         name: fileName,
@@ -105,3 +105,4 @@ exports.handler = async function (event) {
     };
   }
 };
+
