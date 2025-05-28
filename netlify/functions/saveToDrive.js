@@ -7,6 +7,20 @@
 
 const { google } = require('googleapis');
 
+function parseCommand(message) {
+  const pattern = /^Сохрани в ([^:]+):\s*(.+)$/i;
+  const match = message.match(pattern);
+
+  if (!match) {
+    throw new Error("Формат команды должен быть: Сохрани в <Папка>: <текст>");
+  }
+
+  const folderName = match[1].trim();
+  const text = match[2].trim();
+
+  return { folderName, text };
+}
+
 async function saveToDrive(folderName, text) {
   const auth = new google.auth.GoogleAuth({
     credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
