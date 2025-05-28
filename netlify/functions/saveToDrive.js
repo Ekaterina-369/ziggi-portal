@@ -57,7 +57,7 @@ exports.handler = async function (event) {
     const drive = google.drive({ version: "v3", auth: jwt });
 
    // 🧠 Сначала найдём ID главной папки "Жевачка"
-const rootRes = await drive.files.list({
+const rootRes = "1wnJOfy5M78g5OTinexy2JddjG0I1LvEs";
   q: `name = 'Жевачка' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
   fields: "files(id, name)"
 });
