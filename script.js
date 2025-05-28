@@ -94,42 +94,13 @@ async function sendToModel(model, prompt) {
   else throw new Error(data.error || "Ответ не получен");
 }
 
-// 🤖 Блок 4 — Проверка всех ИИ (верхняя панель)
-document.getElementById("check-all").addEventListener("click", async () => {
-  const input = document.getElementById("check-input");
-  const question = input.value.trim();
-  if (!question) return;
-
-  const chatBox = document.getElementById("chat-box");
-  chatBox.innerHTML += `<p><strong>Ты (проверка):</strong> ${question}</p>`;
-  input.value = "";
-
-  try {
-    const response = await fetch("/.netlify/functions/test-all", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: question })
-    });
-
-    const data = await response.json();
-
-    chatBox.innerHTML += `<p><strong>Зигги (ChatGPT):</strong> ${data.chatgpt || "❌ Нет ответа"}</p>`;
-    chatBox.innerHTML += `<p><strong>Зигги (YandexGPT):</strong> ${data.yandexgpt || "❌ Нет ответа"}</p>`;
-    chatBox.innerHTML += `<p><strong>Зигги (DeepSeek):</strong> ${data.deepseek || "❌ Нет ответа"}</p>`;
-  } catch (err) {
-    chatBox.innerHTML += `<p style="color: red;">Ошибка при проверке всех ИИ: ${err.message}</p>`;
-  }
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-});
-
-// 🧪 Блок 5 — Переключатель панели теста
+// 🧪 Блок 4 — Переключатель панели теста
 document.getElementById("toggle-test").addEventListener("click", () => {
   const panel = document.getElementById("test-panel");
   panel.style.display = panel.style.display === "none" ? "block" : "none";
 });
 
-// ✅ Блок 6 — Проверка ИИ через нижнюю панель
+// ✅ Блок 5 — Проверка ИИ через нижнюю панель
 document.getElementById("check-all").addEventListener("click", async () => {
   const input = document.getElementById("check-input");
   const question = input.value.trim();
