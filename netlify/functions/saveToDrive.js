@@ -7,9 +7,10 @@
 
 const { google } = require('googleapis');
 
-function parseCommand(message) {
+async function saveToDrive(command) {
+  // ⬇️ Разбор команды "Сохрани в Книга: всё отлично"
   const pattern = /^Сохрани в ([^:]+):\s*(.+)$/i;
-  const match = message.match(pattern);
+  const match = command.match(pattern);
 
   if (!match) {
     throw new Error("Формат команды должен быть: Сохрани в <Папка>: <текст>");
@@ -18,10 +19,6 @@ function parseCommand(message) {
   const folderName = match[1].trim();
   const text = match[2].trim();
 
-  return { folderName, text };
-}
-
-async function saveToDrive(folderName, text) {
   const auth = new google.auth.GoogleAuth({
     credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
     scopes: ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/documents']
@@ -57,9 +54,14 @@ async function saveToDrive(folderName, text) {
 
   const documentId = fileList.data.files[0].id;
 
-  // 4. Добавляем текст + разделитель
+  // 4. Готовим текст + разделитель
   const contentToInsert = `${text}\n\n---\n\n`;
 
+  // 5. Получаем реальную длину документа
+  const doc = await docs.documents.get({ documentId });
+  const endIndex = doc.data.body.content.at(-1)?.endIndex || 1;
+
+  // 6. Вставляем текст в конец
   await docs.documents.batchUpdate({
     documentId,
     requestBody: {
@@ -67,7 +69,7 @@ async function saveToDrive(folderName, text) {
         {
           insertText: {
             location: {
-              index: 1e8 // вставляем в конец документа
+              index: endIndex
             },
             text: contentToInsert
           }
