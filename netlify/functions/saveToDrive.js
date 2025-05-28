@@ -59,9 +59,14 @@ async function saveToDrive(command) {
 
   // 5. Получаем реальную длину документа
   const doc = await docs.documents.get({ documentId });
-  const endIndex = doc.data.body.content.at(-1)?.endIndex || 1;
 
-  // 6. Вставляем текст в конец
+  // 6. Находим корректный index конца документа (устойчиво даже при пустом)
+  let endIndex = 1;
+  for (const el of doc.data.body.content) {
+    if (el.endIndex) endIndex = el.endIndex;
+  }
+
+  // 7. Вставляем текст в конец
   await docs.documents.batchUpdate({
     documentId,
     requestBody: {
