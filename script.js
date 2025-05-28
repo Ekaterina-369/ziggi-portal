@@ -8,6 +8,7 @@
 let lastPrompt = "";
 let lastModel = "";
 
+// 🧩 Блок 1 — Обработка отправки сообщения через форму
 document.getElementById("chat-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -46,7 +47,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
-// 💡 Новая живая логика с весами
+// 🌟 Блок 2 — Выбор подходящей модели на основе сообщения
 function chooseModel(message) {
   const lower = message.toLowerCase();
   const scores = {
@@ -80,6 +81,7 @@ function chooseModel(message) {
   return bestModel[1] > 0 ? bestModel[0] : "yandexgpt";
 }
 
+// 🚀 Блок 3 — Отправка запроса к выбранной модели
 async function sendToModel(model, prompt) {
   const response = await fetch("/.netlify/functions/chat", {
     method: "POST",
@@ -92,7 +94,7 @@ async function sendToModel(model, prompt) {
   else throw new Error(data.error || "Ответ не получен");
 }
 
-// 🔍 Проверка всех ИИ
+// 🤖 Блок 4 — Проверка всех ИИ (верхняя панель)
 document.getElementById("check-all").addEventListener("click", async () => {
   const input = document.getElementById("check-input");
   const question = input.value.trim();
@@ -121,13 +123,13 @@ document.getElementById("check-all").addEventListener("click", async () => {
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
-// ⬇️ Переключатель тест-блока
+// 🧪 Блок 5 — Переключатель панели теста
 document.getElementById("toggle-test").addEventListener("click", () => {
   const panel = document.getElementById("test-panel");
   panel.style.display = panel.style.display === "none" ? "block" : "none";
 });
 
-// ✅ Проверка всех ИИ
+// ✅ Блок 6 — Проверка ИИ через нижнюю панель
 document.getElementById("check-all").addEventListener("click", async () => {
   const input = document.getElementById("check-input");
   const question = input.value.trim();
@@ -155,12 +157,16 @@ document.getElementById("check-all").addEventListener("click", async () => {
   resultDiv.scrollTop = resultDiv.scrollHeight;
 });
 
+// 🌈 Блок 7 — Прокрутка вниз (чтобы видеть последние сообщения)
 function scrollToBottom() {
   const chatContainer = document.getElementById("chat-container");
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
+// ✉️ Блок 8 — Отправка сообщения вручную (если понадобится)
 function sendMessage() {
   // ...твоя логика отправки...
   scrollToBottom(); // добавляем прокрутку вниз после ответа
 }
+
+
