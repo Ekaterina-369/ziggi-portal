@@ -25,14 +25,6 @@
     <div id="chat-box"></div>
   </div>
 
-  <!-- 🤖 Кнопка для открытия панели теста всех ИИ -->
-<div style="position: fixed; bottom: 70px; width: 100%; text-align: center; z-index: 50;">
-  <button id="toggle-test"
-    style="font-size: 12px; opacity: 0.9; background: rgba(255, 255, 255, 0.6); border: 1px dashed #666; padding: 4px 12px; border-radius: 8px; cursor: pointer;">
-    Тест всех ИИ (отладка)
-  </button>
-</div>
-
   <!-- 📝 Поле ввода сообщений -->
   <div id="input-container">
     <form id="chat-form">
@@ -41,6 +33,14 @@
       <button type="submit">Отправить</button>
     </form>
   </div>
+
+<!-- 🤖 Кнопка теста всех ИИ -->
+<div style="position: fixed; bottom: 70px; width: 100%; text-align: center; z-index: 50;">
+  <button id="toggle-test"
+    style="font-size: 13px; font-weight: bold; background: white; border: 1px solid #a066d4; border-radius: 8px; padding: 6px 14px; box-shadow: 0 0 6px rgba(107, 0, 179, 0.3); color: #553c9a; cursor: pointer;">
+    Тест всех ИИ (отладка)
+  </button>
+</div>
 
   <!-- 📊 Панель для вывода результатов от всех ИИ -->
 <div id="test-panel" style="display: none; padding: 20px; margin-top: 20px; max-width: 700px; margin-left: auto; margin-right: auto; background: rgba(255,255,255,0.85); border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
