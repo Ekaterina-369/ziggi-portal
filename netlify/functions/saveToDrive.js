@@ -7,7 +7,19 @@
 
 const { google } = require("googleapis");
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
+  if (!event.body) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: "Тело запроса пустое. Проверь headers и JSON.stringify."
+      })
+    };
+  }
+
+  try {
+    const { text } = JSON.parse(event.body);
+
   try {
     const { text } = JSON.parse(event.body || "{}");
 
