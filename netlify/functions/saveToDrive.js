@@ -84,13 +84,6 @@ if (!folderId) {
     body: JSON.stringify({ message: `Папка '${folderName}' внутри 'Жевачка' не найдена.` }),
   };
 }
-    const folderId = folderRes.data.files[0]?.id;
-    if (!folderId) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ message: `Папка '${folderName}' не найдена.` }),
-      };
-    }
 
     // 📄 Создаём новый текстовый файл — как капсулу момента
     await drive.files.create({
