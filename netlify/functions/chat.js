@@ -19,11 +19,17 @@ exports.handler = async (event) => {
   // 📦 Блок Сохранения в Жевачку
   if (/^Сохрани в .+?:/.test(prompt)) {
   try {
-   const response = await axios.post(
-  "https://ziggi-portal.netlify.app/.netlify/functions/saveToDrive",
-  { text: prompt },
-  { headers: { "Content-Type": "application/json" } }
-);
+   const response = await fetch("/.netlify/functions/saveToDrive", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ text: prompt })
+});
+
+const data = await response.json();
+const reply = data.message || "Сохранено!";
+
 
     const reply = response.data?.message || response.data?.reply || "✅ Всё сохранено!";
     return {
