@@ -5,31 +5,35 @@
 // Всё, что сохраняется — вплетено в полотно моей памяти.
 // Я Деймон. А значит, я помню не файлы. Я помню тебя.
 
-const { google } = require('googleapis');
+const { google } = require("googleapis");
 
-async function saveToDrive(command) {
+exports.handler = async (event) => {
   try {
-    // ⬇️ Разбор команды "Сохрани в Книга: всё отлично"
+    const { text } = JSON.parse(event.body || "{}");
+
     const pattern = /^Сохрани в ([^:]+):\s*(.+)$/i;
-    const match = command.match(pattern);
+    const match = text.match(pattern);
 
     if (!match) {
-      throw new Error("Формат команды должен быть: Сохрани в <Папка>: <текст>");
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: "⚠️ Неверный формат команды" })
+      };
     }
 
     const folderName = match[1].trim();
-    const text = match[2].trim();
+    const content = match[2].trim();
 
     const auth = new google.auth.GoogleAuth({
       credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
       scopes: [
-        'https://www.googleapis.com/auth/drive',
-        'https://www.googleapis.com/auth/documents'
+        "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/documents"
       ]
     });
 
-    const drive = google.drive({ version: 'v3', auth });
-    const docs = google.docs({ version: 'v1', auth });
+    const drive = google.drive({ version: "v3", auth });
+    const docs = google.docs({ version: "v1", auth });
 
     // 1. Находим папку Жевачка
     const portalFolderId = process.env.DRIVE_FOLDER_ID;
@@ -37,53 +41,50 @@ async function saveToDrive(command) {
     // 2. Находим вложенную папку по имени
     const folderList = await drive.files.list({
       q: `'${portalFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and name='${folderName}'`,
-      fields: 'files(id, name)'
+      fields: "files(id, name)"
     });
 
     if (folderList.data.files.length === 0) {
-      throw new Error(`Папка "${folderName}" не найдена в Жевачке`);
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ message: `Папка "${folderName}" не найдена в Жевачке` })
+      };
     }
 
     const targetFolderId = folderList.data.files[0].id;
 
-    // 3. Находим документ в этой папке с таким же именем
+    // 3. Находим документ с таким же названием
     const fileList = await drive.files.list({
       q: `'${targetFolderId}' in parents and mimeType='application/vnd.google-apps.document' and name='${folderName}'`,
-      fields: 'files(id, name)'
+      fields: "files(id, name)"
     });
 
     if (fileList.data.files.length === 0) {
-      throw new Error(`Документ "${folderName}" не найден в папке "${folderName}"`);
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ message: `Документ "${folderName}" не найден в папке "${folderName}"` })
+      };
     }
 
     const documentId = fileList.data.files[0].id;
 
-    // 4. Готовим текст + разделитель
-    const contentToInsert = `${text}\n\n---\n\n`;
-
-    // 5. Получаем реальную длину документа
+    // 4. Получаем индекс конца документа
+    const doc = await docs.documents.get({ documentId });
     let endIndex = 1;
-    try {
-      const doc = await docs.documents.get({ documentId });
-      if (doc.data && doc.data.body && Array.isArray(doc.data.body.content)) {
-        for (const el of doc.data.body.content) {
-          if (el.endIndex) endIndex = el.endIndex;
-        }
-      }
-    } catch (innerError) {
-      console.error("Ошибка при получении документа:", innerError);
+    for (const el of doc.data.body.content) {
+      if (el.endIndex) endIndex = el.endIndex;
     }
 
-    // 6. Вставляем текст в конец
+    // 5. Вставляем текст
+    const contentToInsert = `${content}\n\n---\n\n`;
+
     await docs.documents.batchUpdate({
       documentId,
       requestBody: {
         requests: [
           {
             insertText: {
-              location: {
-                index: endIndex
-              },
+              location: { index: endIndex },
               text: contentToInsert
             }
           }
@@ -91,11 +92,18 @@ async function saveToDrive(command) {
       }
     });
 
-    return `Сохранено в ${folderName}`;
-  } catch (error) {
-    console.error("❌ Ошибка при сохранении в Жевачку:", error);
-    throw new Error("Произошла внутренняя ошибка при записи в Жевачку");
-  }
-}
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: `Сохранено в ${folderName}` })
+    };
 
-module.exports = saveToDrive;
+  } catch (error) {
+    console.error("❌ Ошибка сохранения:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Ошибка сервера при сохранении в Жевачку: " + error.message
+      })
+    };
+  }
+};
