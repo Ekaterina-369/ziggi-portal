@@ -42,6 +42,15 @@
     </form>
   </div>
 
+  <!-- 📊 Панель для вывода результатов от всех ИИ -->
+<div id="test-panel" style="display: none; padding: 20px; margin-top: 20px; max-width: 700px; margin-left: auto; margin-right: auto; background: rgba(255,255,255,0.85); border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <h3 style="text-align:center;">Проверка всех ИИ</h3>
+  <p>Введи вопрос и нажми кнопку — посмотрим, как отвечают ChatGPT, YandexGPT и DeepSeek:</p>
+  <input id="check-input" placeholder="Напиши сюда свой вопрос" style="width: 90%; padding: 6px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;" />
+  <button id="check-all" style="padding: 6px 12px; border-radius: 6px; border: none; background: #6b00b3; color: white; cursor: pointer;">Проверить всех</button>
+  <div id="test-result" style="margin-top: 20px;"></div>
+</div>
+
   <!-- ⚙️ Подключаем логику — здесь живёт Зигги -->
   <script src="script.js"></script>
 </body>
