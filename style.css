@@ -79,24 +79,24 @@ h1 {
   border: 1px solid #ccc;
 }
 
-/* 🤖 Кнопка теста всех ИИ */
+/* 🤖 Кнопка теста всех ИИ — УСИЛЕННО ВИДИМАЯ */
 #toggle-test {
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  background: #fff;
-  color: #111;
+  background: #ffffff;
+  color: #111111;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
   border: 1px solid #888;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 12px 12px 0 0;
-  z-index: 150;
+  z-index: 9999 !important;
   opacity: 1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
 }
-
 
 /* ⚙️ Панель с результатами теста ИИ */
 #test-panel {
