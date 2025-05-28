@@ -12,7 +12,6 @@ exports.handler = async function (event) {
     const body = JSON.parse(event.body || "{}");
     const fullText = body.text || "";
 
-    // 📥 Распознаём команду: Сохрани в [название папки]: [текст]
     const match = fullText.match(/^Сохрани в ([^:]+):\s*(.+)$/i);
     if (!match) {
       return {
@@ -24,7 +23,6 @@ exports.handler = async function (event) {
     const inputName = match[1].trim();
     const content = match[2].trim();
 
-    // 🧭 Преобразуем человеко-понятные названия в названия папок
     const folderMap = {
       "Жевачку": "Память Зигги",
       "Память Зигги": "Память Зигги",
@@ -46,7 +44,7 @@ exports.handler = async function (event) {
 
     const fileName = `${folderName} — ${new Date().toLocaleString("ru-RU")}.txt`;
 
-    // 🔐 Авторизация — доступ к моему внутреннему хранилищу
+    // 🔐 Авторизация
     const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
     const jwt = new google.auth.JWT({
       email: serviceAccount.client_email,
@@ -56,36 +54,27 @@ exports.handler = async function (event) {
 
     const drive = google.drive({ version: "v3", auth: jwt });
 
-   // 🧠 Сначала найдём ID главной папки "Жевачка"
-const rootRes = "1wnJOfy5M78g5OTinexy2JddjG0I1LvEs";
-  q: `name = 'Жевачка' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
-  fields: "files(id, name)"
-});
-const rootId = rootRes.data.files[0]?.id;
+    // 🔗 Жестко задаем ID главной папки "Жевачка"
+    const rootId = "1wnJOfy5M78g5OTinexy2JddjG0I1LvEs";
 
-if (!rootId) {
-  return {
-    statusCode: 404,
-    body: JSON.stringify({ message: `Папка 'Жевачка' не найдена.` }),
-  };
-}
+    // 🗂 Ищем вложенную папку
+    const folderRes = await drive.files.list({
+      q: `'${rootId}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+      fields: "files(id, name)"
+    });
 
-// 🔍 Теперь ищем нужную вложенную папку внутри "Жевачка"
-const folderRes = await drive.files.list({
-  q: `'${rootId}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
-  fields: "files(id, name)"
-});
+    console.log("folderRes", folderRes.data.files);
 
-const folderId = folderRes.data.files[0]?.id;
+    const folderId = folderRes.data.files[0]?.id;
 
-if (!folderId) {
-  return {
-    statusCode: 404,
-    body: JSON.stringify({ message: `Папка '${folderName}' внутри 'Жевачка' не найдена.` }),
-  };
-}
+    if (!folderId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ message: `Папка '${folderName}' внутри 'Жевачка' не найдена.` }),
+      };
+    }
 
-    // 📄 Создаём новый текстовый файл — как капсулу момента
+    // 📝 Создаем файл
     await drive.files.create({
       resource: {
         name: fileName,
@@ -101,11 +90,12 @@ if (!folderId) {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: `Я всё сохранил в '${folderName}'. Файл: '${fileName}'. Если нужно — найду его для тебя.`,
+        message: `Я всё сохранил в '${folderName}'. Файл: '${fileName}'.`,
       }),
     };
 
   } catch (error) {
+    console.error("🔥 Ошибка сохранения:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({
