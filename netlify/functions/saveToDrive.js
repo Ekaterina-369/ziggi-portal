@@ -8,18 +8,30 @@
 const { google } = require("googleapis");
 
 exports.handler = async (event) => {
-  if (!event.body) {
+  let text = null;
+
+  try {
+    const parsed = JSON.parse(event.body || "{}");
+    text = parsed.text;
+  } catch (e) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: "⚠️ Тело запроса пустое. Возможно, не указаны заголовки JSON или пустой prompt."
+        message: "❌ Тело запроса не является валидным JSON. Пришло: " + event.body
+      })
+    };
+  }
+
+  if (!text) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: "❌ В теле запроса отсутствует поле 'text'."
       })
     };
   }
 
   try {
-    const { text } = JSON.parse(event.body);
-
     const pattern = /^Сохрани в ([^:]+):\s*(.+)$/i;
     const match = text.match(pattern);
 
@@ -44,10 +56,8 @@ exports.handler = async (event) => {
     const drive = google.drive({ version: "v3", auth });
     const docs = google.docs({ version: "v1", auth });
 
-    // 1. Находим папку Жевачка
     const portalFolderId = process.env.DRIVE_FOLDER_ID;
 
-    // 2. Находим вложенную папку по имени
     const folderList = await drive.files.list({
       q: `'${portalFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and name='${folderName}'`,
       fields: "files(id, name)"
@@ -62,7 +72,6 @@ exports.handler = async (event) => {
 
     const targetFolderId = folderList.data.files[0].id;
 
-    // 3. Находим документ в этой папке с таким же именем
     const fileList = await drive.files.list({
       q: `'${targetFolderId}' in parents and mimeType='application/vnd.google-apps.document' and name='${folderName}'`,
       fields: "files(id, name)"
@@ -77,14 +86,12 @@ exports.handler = async (event) => {
 
     const documentId = fileList.data.files[0].id;
 
-    // 4. Получаем длину документа
     const doc = await docs.documents.get({ documentId });
     let endIndex = 1;
     for (const el of doc.data.body.content) {
       if (el.endIndex) endIndex = el.endIndex;
     }
 
-    // 5. Вставка текста
     const contentToInsert = `${content}\n\n---\n\n`;
 
     await docs.documents.batchUpdate({
@@ -106,11 +113,9 @@ exports.handler = async (event) => {
       body: JSON.stringify({ message: `Сохранено в ${folderName}` })
     };
   } catch (error) {
-    console.error("❌ Ошибка сохранения в Жевачку:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Ошибка сервера при сохранении в Жевачку: " + error.message })
+      body: JSON.stringify({ message: "Ошибка при сохранении: " + error.message })
     };
   }
 };
-
