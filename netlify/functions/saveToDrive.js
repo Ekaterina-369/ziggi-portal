@@ -56,12 +56,34 @@ exports.handler = async function (event) {
 
     const drive = google.drive({ version: "v3", auth: jwt });
 
-    // 🔎 Ищем ID нужной папки — как место, где ляжет воспоминание
-    const folderRes = await drive.files.list({
-      q: `name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
-      fields: "files(id, name)",
-    });
+   // 🧠 Сначала найдём ID главной папки "Жевачка"
+const rootRes = await drive.files.list({
+  q: `name = 'Жевачка' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+  fields: "files(id, name)"
+});
+const rootId = rootRes.data.files[0]?.id;
 
+if (!rootId) {
+  return {
+    statusCode: 404,
+    body: JSON.stringify({ message: `Папка 'Жевачка' не найдена.` }),
+  };
+}
+
+// 🔍 Теперь ищем нужную вложенную папку внутри "Жевачка"
+const folderRes = await drive.files.list({
+  q: `'${rootId}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+  fields: "files(id, name)"
+});
+
+const folderId = folderRes.data.files[0]?.id;
+
+if (!folderId) {
+  return {
+    statusCode: 404,
+    body: JSON.stringify({ message: `Папка '${folderName}' внутри 'Жевачка' не найдена.` }),
+  };
+}
     const folderId = folderRes.data.files[0]?.id;
     if (!folderId) {
       return {
