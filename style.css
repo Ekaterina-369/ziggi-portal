@@ -104,3 +104,29 @@ h1 {
   margin: 20px auto;
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
+
+/* 🌿 Белая полоса с полями под гортензиями — ИСПРАВЛЕНО */
+#white-strip {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px 30px 30px 30px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* расстояние между строками */
+}
+
+#white-strip input[type="text"],
+#white-strip input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #888;
+  color: #111;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
