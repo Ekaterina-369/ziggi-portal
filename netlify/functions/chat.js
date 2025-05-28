@@ -34,7 +34,9 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        reply: "❌ Не удалось сохранить в Жевачку. " + (err.response?.data || err.message)
+        reply: "❌ Не удалось сохранить в Жевачку. " + (typeof err.response?.data === "object"
+  ? JSON.stringify(err.response.data)
+  : err.response?.data || err.message)
       })
     };
   }
