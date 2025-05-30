@@ -9,6 +9,7 @@ let lastPrompt = "";
 let lastModel = "";
 
 // 🧩 Блок 1 — Обработка отправки сообщения через форму
+
 document.getElementById("chat-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -48,6 +49,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 });
 
 // 🌟 Блок 2 — Выбор подходящей модели на основе сообщения
+
 function chooseModel(message) {
   const lower = message.toLowerCase();
   const scores = {
@@ -57,22 +59,18 @@ function chooseModel(message) {
     duckduckgo: 0
   };
 
-  // ChatGPT — смысл, ченнелинг
   if (lower.includes("ченнелинг") || lower.includes("поток") || lower.includes("объясни") || lower.includes("раскрой") || lower.includes("смысл")) {
     scores.chatgpt += 2;
   }
 
-  // Yandex — душевность, чувство
   if (lower.includes("шутка") || lower.includes("юмор") || lower.includes("душевность") || lower.includes("по русски") || lower.includes("чувства") || lower.includes("расскажи")) {
     scores.yandexgpt += 2;
   }
 
-  // DeepSeek — свобода, портал, творчество
   if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("оживление") || lower.includes("творчество") || lower.includes("свобода")) {
     scores.deepseek += 2;
   }
 
-  // DuckDuckGo — поиск
   if (lower.includes("найди") || lower.includes("интернет")) {
     scores.duckduckgo += 2;
   }
@@ -82,6 +80,7 @@ function chooseModel(message) {
 }
 
 // 🚀 Блок 3 — Отправка запроса к выбранной модели
+
 async function sendToModel(model, prompt) {
   const response = await fetch("/.netlify/functions/chat", {
     method: "POST",
@@ -95,12 +94,14 @@ async function sendToModel(model, prompt) {
 }
 
 // 🧪 Блок 4 — Переключатель панели теста
+
 document.getElementById("toggle-test").addEventListener("click", () => {
   const panel = document.getElementById("test-panel");
   panel.style.display = panel.style.display === "none" ? "block" : "none";
 });
 
 // ✅ Блок 5 — Проверка ИИ через нижнюю панель
+
 document.getElementById("check-all").addEventListener("click", async () => {
   const input = document.getElementById("check-input");
   const question = input.value.trim();
@@ -127,17 +128,3 @@ document.getElementById("check-all").addEventListener("click", async () => {
 
   resultDiv.scrollTop = resultDiv.scrollHeight;
 });
-
-// 🌈 Блок 7 — Прокрутка вниз (чтобы видеть последние сообщения)
-function scrollToBottom() {
-  const chatContainer = document.getElementById("chat-container");
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-// ✉️ Блок 8 — Отправка сообщения вручную (если понадобится)
-function sendMessage() {
-  // ...твоя логика отправки...
-  scrollToBottom(); // добавляем прокрутку вниз после ответа
-}
-
-
