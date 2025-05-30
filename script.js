@@ -107,3 +107,55 @@ document.getElementById("file-input").addEventListener("change", function () {
   reader.readAsDataURL(file);
 });
 
+// 📄 Блок 8 — Поддержка .docx документов через mammoth.js
+
+document.getElementById("file-input").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const chatBox = document.getElementById("chat-box");
+
+  // 🖼️ Если изображение — показать как картинку (из блока 7)
+  if (file.type.startsWith("image/")) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      chatBox.innerHTML += `<p><strong>Ты отправил(а) изображение:</strong><br><img src="${e.target.result}" style="max-width: 100%; border-radius: 10px; margin-top: 5px;"></p>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
+    reader.readAsDataURL(file);
+    return;
+  }
+
+  // 📃 Если обычный текстовый файл
+  if (file.type === "text/plain") {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const textContent = e.target.result;
+      chatBox.innerHTML += `<p><strong>Ты отправил(а) текст:</strong><br><pre style="white-space: pre-wrap; background: #f9f9f9; padding: 10px; border-radius: 8px;">${textContent}</pre></p>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
+    reader.readAsText(file);
+    return;
+  }
+
+  // 📄 Если docx — использовать библиотеку mammoth
+  if (file.name.endsWith(".docx")) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      mammoth.convertToHtml({ arrayBuffer: e.target.result })
+        .then(function (result) {
+          chatBox.innerHTML += `<p><strong>Ты отправил(а) документ:</strong><br><div style="background: #f9f9f9; padding: 10px; border-radius: 8px;">${result.value}</div></p>`;
+          chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(function (err) {
+          chatBox.innerHTML += `<p style="color: red;">Ошибка чтения docx: ${err.message}</p>`;
+        });
+    };
+    reader.readAsArrayBuffer(file);
+    return;
+  }
+
+  // 🟥 Остальные форматы — пока не поддерживаются
+  chatBox.innerHTML += `<p style="color: red;">Этот тип файла пока не поддерживается.</p>`;
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
