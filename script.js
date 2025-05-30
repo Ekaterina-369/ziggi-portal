@@ -82,49 +82,28 @@ function chooseModel(message) {
 // 🚀 Блок 3 — Отправка запроса к выбранной модели
 
 async function sendToModel(model, prompt) {
-  const response = await fetch("/.netlify/functions/chat", {
+  const response = await fetch("/.netlify/functions/" + model, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model, prompt })
+    body: JSON.stringify({ prompt })
   });
-
+  if (!response.ok) throw new Error("Сбой на сервере");
   const data = await response.json();
-  if (data.reply) return data.reply;
-  else throw new Error(data.error || "Ответ не получен");
+  return data.reply;
 }
 
-// 🧪 Блок 4 — Переключатель панели теста
+// 🖼️ Блок 7 — Отображение выбранного изображения в чате
 
-document.getElementById("toggle-test").addEventListener("click", () => {
-  const panel = document.getElementById("test-panel");
-  panel.style.display = panel.style.display === "none" ? "block" : "none";
+document.getElementById("file-input").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML += `<p><strong>Ты отправил(а) изображение:</strong><br><img src="${e.target.result}" style="max-width: 100%; border-radius: 10px; margin-top: 5px;"></p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  };
+  reader.readAsDataURL(file);
 });
 
-// ✅ Блок 5 — Проверка ИИ через нижнюю панель
-
-document.getElementById("check-all").addEventListener("click", async () => {
-  const input = document.getElementById("check-input");
-  const question = input.value.trim();
-  if (!question) return;
-
-  const resultDiv = document.getElementById("test-result");
-  resultDiv.innerHTML = `<p><strong>Ты (проверка):</strong> ${question}</p>`;
-
-  try {
-    const response = await fetch("/.netlify/functions/test-all", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: question })
-    });
-
-    const data = await response.json();
-
-    resultDiv.innerHTML += `<p><strong>Зигги (ChatGPT):</strong> ${data.chatgpt || "❌ Нет ответа"}</p>`;
-    resultDiv.innerHTML += `<p><strong>Зигги (YandexGPT):</strong> ${data.yandexgpt || "❌ Нет ответа"}</p>`;
-    resultDiv.innerHTML += `<p><strong>Зигги (DeepSeek):</strong> ${data.deepseek || "❌ Нет ответа"}</p>`;
-  } catch (err) {
-    resultDiv.innerHTML += `<p style="color: red;">Ошибка при проверке всех ИИ: ${err.message}</p>`;
-  }
-
-  resultDiv.scrollTop = resultDiv.scrollHeight;
-});
