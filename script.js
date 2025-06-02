@@ -162,3 +162,4 @@ document.getElementById("file-input").addEventListener("change", function () {
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
+setInterval(injectButtonsToMessages, 1000);
