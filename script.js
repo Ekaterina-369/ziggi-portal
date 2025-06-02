@@ -52,10 +52,7 @@ messageBlock.className = "message";
 
 if (reply.includes("```")) {
   const codeContent = reply.split("```")[1].replace(/^javascript\\n/, "");
-  messageBlock.innerHTML = `
-    <strong>Зигги (${modelName}):</strong>
-    <pre><code>${codeContent}</code></pre>
-  `;
+  messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong><pre><code>${codeContent}</code></pre>`;
 } else {
   messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${reply}`;
 }
