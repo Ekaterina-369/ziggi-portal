@@ -48,6 +48,8 @@ chatBox.appendChild(userBlock);
   }
 
 const messageBlock = document.createElement("div");
+  console.log("💬 Ответ пришёл:", reply);
+console.log("📦 Модель:", modelName);
 messageBlock.className = "message";
 
 if (reply.includes("```")) {
