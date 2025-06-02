@@ -57,7 +57,7 @@ if (reply.includes("```")) {
     <pre><code>${codeContent}</code></pre>
   `;
 } else {
-  messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${reply}`;
+  chatBox.innerHTML += `<p class="message"><strong>Зигги (${modelName}):</strong> ${reply}</p>`;
 }
 
 chatBox.appendChild(messageBlock);
