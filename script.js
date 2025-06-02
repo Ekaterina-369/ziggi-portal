@@ -47,6 +47,21 @@ chatBox.appendChild(userBlock);
     chatBox.innerHTML += `<p style="color: red;">Ошибка: ${err.message}</p>`;
   }
 
+  const messageBlock = document.createElement("div");
+messageBlock.className = "message";
+
+if (reply.includes("```")) {
+  const codeContent = reply.split("```")[1].replace(/^javascript\\n/, "");
+  messageBlock.innerHTML = `
+    <strong>Зигги (${modelName}):</strong>
+    <pre><code>${codeContent}</code></pre>
+  `;
+} else {
+  messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${reply}`;
+}
+
+chatBox.appendChild(messageBlock);
+
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
