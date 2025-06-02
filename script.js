@@ -47,7 +47,7 @@ chatBox.appendChild(userBlock);
     chatBox.innerHTML += `<p style="color: red;">Ошибка: ${err.message}</p>`;
   }
 
- const messageBlock = document.createElement("div");
+const messageBlock = document.createElement("div");
 messageBlock.className = "message";
 
 if (reply.includes("```")) {
@@ -59,6 +59,7 @@ if (reply.includes("```")) {
 
 chatBox.appendChild(messageBlock);
 chatBox.scrollTop = chatBox.scrollHeight;
+
 
 // 🌟 Блок 2 — Выбор подходящей модели на основе сообщения
 
