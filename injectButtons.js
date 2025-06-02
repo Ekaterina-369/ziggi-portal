@@ -9,11 +9,11 @@ const DOCUMENT_IDS = {
 };
 
 const BUTTON_CONFIG = [
-  { id: 'memory', label: '🧠 Сохранить в Память Зигги' },
-  { id: 'channelling', label: '✨ Сохранить в Ченнелинги' },
-  { id: 'ideas', label: '💡 Сохранить в Идеи' },
-  { id: 'modules', label: '📦 Сохранить в Модули проекта' },
-  { id: 'book', label: '📖 Сохранить в Книгу' },
+  { id: 'memory', label: '🧠' },
+  { id: 'channelling', label: '✨' },
+  { id: 'ideas', label: '💡' },
+  { id: 'modules', label: '📦' },
+  { id: 'book', label: '📖' },
   { id: 'copy', label: null }
 ];
 
