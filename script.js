@@ -159,5 +159,5 @@ document.getElementById("file-input").addEventListener("change", function () {
   chatBox.innerHTML += `<p style="color: red;">Этот тип файла пока не поддерживается.</p>`;
   chatBox.scrollTop = chatBox.scrollHeight;
 }
-
+;
 setInterval(injectButtonsToMessages, 1000);
