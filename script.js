@@ -18,8 +18,10 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   if (!message) return;
 
   const chatBox = document.getElementById("chat-box");
-  chatBox.innerHTML += `<p><strong>Ты:</strong> ${message}</p>`;
-  input.value = "";
+  const userBlock = document.createElement("div");
+userBlock.className = "message";
+userBlock.innerHTML = `<strong>Ты:</strong> ${message}`;
+chatBox.appendChild(userBlock);
 
   let model;
   let prompt;
