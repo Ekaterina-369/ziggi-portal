@@ -47,7 +47,7 @@ chatBox.appendChild(userBlock);
     chatBox.innerHTML += `<p style="color: red;">Ошибка: ${err.message}</p>`;
   }
 
-  const messageBlock = document.createElement("div");
+ const messageBlock = document.createElement("div");
 messageBlock.className = "message";
 
 if (reply.includes("```")) {
@@ -57,13 +57,11 @@ if (reply.includes("```")) {
     <pre><code>${codeContent}</code></pre>
   `;
 } else {
-  chatBox.innerHTML += `<p class="message"><strong>Зигги (${modelName}):</strong> ${reply}</p>`;
+  messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${reply}`;
 }
 
 chatBox.appendChild(messageBlock);
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-});
+chatBox.scrollTop = chatBox.scrollHeight;
 
 // 🌟 Блок 2 — Выбор подходящей модели на основе сообщения
 
