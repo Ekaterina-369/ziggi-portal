@@ -53,11 +53,7 @@
                         model === "deepseek" ? "DeepSeek" :
                         "DuckDuckGo";
 
-      chatBox.innerHTML += `<p><strong>Зигги (${modelName}):</strong> ${reply}</p>`;
-
       const messageBlock = document.createElement("div");
-      console.log("💬 Ответ пришёл:", reply);
-      console.log("📦 Модель:", modelName);
       messageBlock.className = "message";
 
       if (reply.includes("```")) {
@@ -70,7 +66,12 @@
       chatBox.appendChild(messageBlock); // 👈 Показываем ответ Зигги
       chatBox.scrollTop = chatBox.scrollHeight;
     } catch (err) {
-      chatBox.innerHTML += `<p style="color: red;">Ошибка: ${err.message}</p>`;
+      const errorBlock = document.createElement("div");
+      errorBlock.className = "message";
+      errorBlock.style.color = "red";
+      errorBlock.innerHTML = `<strong>Ошибка:</strong> ${err.message}`;
+      chatBox.appendChild(errorBlock);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
   });
   <!-- КОНЕЦ: 💬 Обработка формы ввода, выбор модели и вывод ответа -->
