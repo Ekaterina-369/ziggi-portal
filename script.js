@@ -82,25 +82,19 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   const lower = message.toLowerCase();
   const models = {
     chatgpt: ["чатгпт", "gpt", "openai", "chatgpt", "чгпт", "ченнелинг", "поток", "объясни", "раскрой", "смысл"],
-   //yandexgpt: ["яндекс", "яша", "yandex", "yandexgpt", "русификатор", "русия", "русский", "шутка", "юмор", "душевность", "по русски", "чувства", "расскажи"],
     deepseek: ["китаец", "deepseek", "китай", "китайский", "deepl", "переведи", "портал", "ии", "искусственный интеллект", "оживление", "творчество", "свобода"],
     duckduckgo: ["найди", "интернет"]
   };
   const scores = {
     chatgpt: 0,
-   // yandexgpt: 0,
     deepseek: 0,
     duckduckgo: 0
   };
-
+    
   if (lower.includes("ченнелинг") || lower.includes("поток") || lower.includes("объясни") || lower.includes("раскрой") || lower.includes("смысл")) {
     scores.chatgpt += 2;
   }
-  // отключено:
-  // if (lower.includes("шутка") || lower.includes("юмор") || lower.includes("душевность") || lower.includes("по русски") || lower.includes("чувства") || lower.includes("расскажи")) {
-    scores.yandexgpt += 2;
-  }
-
+    
   if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("китаец") || lower.includes("творчество") || lower.includes("свобода")) {
     scores.deepseek += 2;
   }
