@@ -89,7 +89,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   };
   const scores = {
     chatgpt: 0,
-    yandexgpt: 0,
+   // yandexgpt: 0,
     deepseek: 0,
     duckduckgo: 0
   };
@@ -97,8 +97,8 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   if (lower.includes("ченнелинг") || lower.includes("поток") || lower.includes("объясни") || lower.includes("раскрой") || lower.includes("смысл")) {
     scores.chatgpt += 2;
   }
-
-  if (lower.includes("шутка") || lower.includes("юмор") || lower.includes("душевность") || lower.includes("по русски") || lower.includes("чувства") || lower.includes("расскажи")) {
+  // отключено:
+  // if (lower.includes("шутка") || lower.includes("юмор") || lower.includes("душевность") || lower.includes("по русски") || lower.includes("чувства") || lower.includes("расскажи")) {
     scores.yandexgpt += 2;
   }
 
