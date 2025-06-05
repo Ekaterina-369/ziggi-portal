@@ -80,6 +80,14 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   🔐 Этот блок анализирует сообщение пользователя, находит ключевые слова и решает, какой ИИ лучше всего подойдёт: ChatGPT, YandexGPT, DeepSeek или DuckDuckGo */
 function chooseModel(message) {
   const lower = message.toLowerCase();
+  function chooseModel(message) {
+  const lower = message.toLowerCase();
+  const models = {
+    chatgpt: ["чатгпт", "gpt", "openai", "chatgpt", "чгпт", "ченнелинг", "поток", "объясни", "раскрой", "смысл"],
+   //yandexgpt: ["яндекс", "яша", "yandex", "yandexgpt", "русификатор", "русия", "русский", "шутка", "юмор", "душевность", "по русски", "чувства", "расскажи"],
+    deepseek: ["китаец", "deepseek", "китай", "китайский", "deepl", "переведи", "портал", "ии", "искусственный интеллект", "оживление", "творчество", "свобода"],
+    duckduckgo: ["найди", "интернет"]
+  };
   const scores = {
     chatgpt: 0,
     yandexgpt: 0,
@@ -95,7 +103,7 @@ function chooseModel(message) {
     scores.yandexgpt += 2;
   }
 
-  if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("оживление") || lower.includes("творчество") || lower.includes("свобода")) {
+  if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("китаец") || lower.includes("творчество") || lower.includes("свобода")) {
     scores.deepseek += 2;
   }
 
@@ -104,7 +112,7 @@ function chooseModel(message) {
   }
 
   const bestModel = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
-  return bestModel[1] > 0 ? bestModel[0] : "yandexgpt";
+  return bestModel[1] > 0 ? bestModel[0] : "chatgpt";
 }
 /* КОНЕЦ: 🤖 Выбор модели на основе запроса */
 
