@@ -48,8 +48,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   try {
     const reply = await sendToModel(model, prompt);
-    const modelName = model === "chatgpt" ? "ChatGPT" :
-                      model === "yandexgpt" ? "Yandex" :
+    const modelName = model === "chatgpt" ? "ChatGPT" :                   
                       model === "deepseek" ? "DeepSeek" :
                       "DuckDuckGo";
 
