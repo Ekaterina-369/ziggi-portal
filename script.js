@@ -78,8 +78,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
 /* НАЧАЛО: 🤖 Выбор модели на основе запроса
   🔐 Этот блок анализирует сообщение пользователя, находит ключевые слова и решает, какой ИИ лучше всего подойдёт: ChatGPT, YandexGPT, DeepSeek или DuckDuckGo */
-function chooseModel(message) {
-  const lower = message.toLowerCase();
+
   function chooseModel(message) {
   const lower = message.toLowerCase();
   const models = {
