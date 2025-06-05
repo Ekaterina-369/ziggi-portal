@@ -34,7 +34,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   let prompt;
 
   if (message.toLowerCase().includes("через другую модель")) {
-    const models = ["chatgpt", "yandexgpt", "deepseek"];
+    const models = ["chatgpt", "deepseek"];
     const currentIndex = models.indexOf(lastModel);
     model = models[(currentIndex + 1) % models.length];
     prompt = lastPrompt;
