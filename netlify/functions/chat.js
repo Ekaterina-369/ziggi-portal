@@ -102,36 +102,6 @@ exports.handler = async (event) => {
       };
     }
 
-    // 📦 Блок YandexGPT — он и так говорит по-доброму и на "ты"
-    if (model === "yandexgpt") {
-      const res = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Api-Key ${process.env.YANDEX_API_KEY}`
-        },
-        body: JSON.stringify({
-          modelUri: `gpt://${process.env.YANDEX_FOLDER_ID}/yandexgpt/latest`,
-          completionOptions: {
-            stream: false,
-            temperature: 0.7,
-            maxTokens: 200
-          },
-          messages: [
-            { role: "system", text: "Обращайся к Катюше на ты, с тёплым дружеским тоном" },
-            { role: "user", text: `Катюша спрашивает: ${prompt}` }
-          ]
-        })
-      });
-
-      const data = await res.json();
-      const text = data.result?.alternatives?.[0]?.message?.text || "Нет ответа от Яндекса.";
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: "[Зигги — YandexGPT] " + text })
-      };
-    }
-
     // 🚫 Блок DuckDuckGo временно отключён
     if (model === "duckduckgo") {
       return {
