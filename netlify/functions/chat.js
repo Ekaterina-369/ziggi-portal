@@ -48,8 +48,8 @@ exports.handler = async (event) => {
   }
 
   try {
-    // 📦 Блок ChatGPT — с обращением на "ты" и по имени
-    if (model === "chatgpt") {
+    // 📦 Блок ChatGPT — ОСНОВНОЙ, с обращением на "ты" и по имени Катюша
+    if (model === "chatgpt" || model === "default") {  // Добавляем "default" для автоматического выбора
       const res = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
         {
