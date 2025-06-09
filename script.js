@@ -34,7 +34,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   let prompt;
 
   if (message.toLowerCase().includes("через другую модель")) {
-    const models = ["chatgpt", "deepseek"];
+    const models = ["deepseek"];
     const currentIndex = models.indexOf(lastModel);
     model = models[(currentIndex + 1) % models.length];
     prompt = lastPrompt;
@@ -48,8 +48,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   try {
     const reply = await sendToModel(model, prompt);
-    const modelName = model === "chatgpt" ? "ChatGPT" :                   
-                      model === "deepseek" ? "DeepSeek" :
+    const modelName = model === "deepseek" ? "DeepSeek" :
                       "DuckDuckGo";
 
     const messageBlock = document.createElement("div");
@@ -81,19 +80,13 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   function chooseModel(message) {
   const lower = message.toLowerCase();
   const models = {
-    chatgpt: ["чатгпт", "gpt", "openai", "chatgpt", "чгпт", "ченнелинг", "поток", "объясни", "раскрой", "смысл"],
     deepseek: ["китаец", "deepseek", "китай", "китайский", "deepl", "переведи", "портал", "ии", "искусственный интеллект", "оживление", "творчество", "свобода"],
     duckduckgo: ["найди", "интернет"]
   };
   const scores = {
-    chatgpt: 0,
     deepseek: 0,
     duckduckgo: 0
   };
-    
-  if (lower.includes("ченнелинг") || lower.includes("поток") || lower.includes("объясни") || lower.includes("раскрой") || lower.includes("смысл")) {
-    scores.chatgpt += 2;
-  }
     
   if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("китаец") || lower.includes("творчество") || lower.includes("свобода")) {
     scores.deepseek += 2;
@@ -104,7 +97,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   }
 
   const bestModel = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
-  return bestModel[1] > 0 ? bestModel[0] : "chatgpt";
+  return bestModel[1] > 0 ? bestModel[0] : "deepseek";
 }
 /* КОНЕЦ: 🤖 Выбор модели на основе запроса */
 
