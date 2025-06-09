@@ -74,7 +74,7 @@ exports.handler = async (event) => {
     }
 
     // 📦 Блок DeepSeek — теперь говорит по-русски, дружелюбно и с обращением к Катюше
-    if (model === "deepseek") {
+    if (model === "deepseek") || model === "default") {
       const safePrompt = prompt.length < 20 ? `Поясни, пожалуйста: ${prompt}` : prompt;
 
       const res = await axios.post(
