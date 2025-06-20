@@ -26,36 +26,45 @@ exports.handler = async function(event) {
     const body = JSON.parse(event.body || '{}');
     const userMessage = body.message || "Что нужно исправить?";
 
+    // Шаг 1: построить карту проекта
     const fileMap = scanProject(".");
-    const entries = Object.entries(fileMap)
-      .filter(([_, data]) => data.size < 10000)
-      .slice(0, 3); // максимум 3 файла
 
-    const filePreviews = entries.map(([name, data]) =>
+    // Шаг 2: сохранить карту в project_map.json
+    fs.writeFileSync("project_map.json", JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      files: fileMap
+    }, null, 2));
+
+    // Шаг 3: выбрать до 3 файлов для анализа
+    const sampleFiles = Object.entries(fileMap)
+      .filter(([_, data]) => data.size < 10000)
+      .slice(0, 3);
+
+    const fileDescriptions = sampleFiles.map(([name, data]) =>
       `Файл: ${name}\n---\n${data.preview}`).join("\n\n");
 
+    // Шаг 4: systemMessage для DeepSeek
     const systemMessage = `
 Ты — Архитектор проекта. Пользователь не умеет программировать.
 
 У тебя есть доступ ко всей структуре проекта: имена и пути всех файлов, а также содержимое ключевых файлов.
-Твоя задача — на основе анализа структуры и содержания файлов выбрать, какие файлы важны для решения задачи пользователя (до 3 штук), и дать точную инструкцию: что и где в них изменить.
+Ты должен сам выбрать важные файлы (до 3), и выдать чёткую инструкцию: что и где в них изменить.
 
-Говори строго и чётко: в каком файле, какую часть заменить и на что. 
-Не объясняй очевидного, не давай лишней информации. Только факты и шаги. 
+Говори строго и чётко: файл, что заменить, на что. Никакой философии.
 
-Все примеры изменений кода — только в формате кодовых блоков.
-Пример:
+Все изменения давай ТОЛЬКО в кодовых блоках:
 \`\`\`js
-// пример кода
+// код
 \`\`\`
 `.trim();
 
+    // Шаг 5: запрос к DeepSeek через OpenRouter
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         model: "deepseek-coder:33b",
         messages: [
-          { role: "system", content: `${systemMessage}\n\n${filePreviews}` },
+          { role: "system", content: `${systemMessage}\n\n${fileDescriptions}` },
           { role: "user", content: userMessage }
         ]
       },
