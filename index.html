@@ -40,21 +40,12 @@
       Архитектор
     </button>
   </div>
-
-  <!-- 🔍 Панель проверки всех ИИ -->
-  <div id="test-panel" style="display: none; position: fixed; bottom: 120px; width: 100%; text-align: center; z-index: 49;">
-    <div style="margin-top: 8px;">
-      <input type="text" id="check-input" placeholder="Проверь всех ИИ..." 
-        style="padding: 8px; width: 70%; max-width: 400px; border-radius: 8px; border: 1px solid #ccc;" />
-      <button id="check-all" 
-        style="padding: 8px 12px; margin-left: 8px; border-radius: 8px; border: 1px solid #666; background-color: white;">
-        Проверить
-      </button>
-    </div>
-    <div id="test-result" 
-      style="padding: 12px; margin-top: 10px; background: rgba(255, 255, 255, 0.75); border-radius: 12px; max-width: 600px; margin-left: auto; margin-right: auto;">
-    </div>
-  </div>
+  <!-- 🔧 Панель архитектора -->
+<div id="architect-panel" style="display: none;">
+  <textarea id="architect-input" placeholder="Введите запрос архитектору..." style="width: 90%; height: 100px; margin: 10px;"></textarea>
+  <button id="architect-send" style="margin-bottom: 10px;">Отправить</button>
+  <div id="architect-response"></div>
+</div>
 
 <!-- ⚙️ Подключаем логику -->
   <script src="injectButtons.js"></script>
