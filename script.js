@@ -170,4 +170,16 @@ document.getElementById("file-input").addEventListener("change", function () {
 setInterval(injectButtonsToMessages, 1000);
 /* КОНЕЦ: 🔄 Периодическое добавление кнопок */
 
+// в самый низ script.js
+document.addEventListener("DOMContentLoaded", () => {
+  const architectButton = document.getElementById("toggle-architect");
+  const panel = document.getElementById("architect-panel");
+
+  if (architectButton && panel) {
+    architectButton.addEventListener("click", () => {
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+  }
+});
+
 /* КОНЕЦ: Полный скрипт ZIGGI с живыми пояснениями Катюши */
