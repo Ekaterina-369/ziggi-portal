@@ -8,6 +8,7 @@
     "axios": "^1.6.0",
     "openai": "^4.0.0",
     "googleapis": "^105.0.0"
+    "@octokit/rest": "^20.0.0"
   },
   "engines": {
     "node": "16.x"
