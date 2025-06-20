@@ -68,3 +68,46 @@ function injectButtonsToMessages() {
 }
 
 setInterval(injectButtonsToMessages, 1000);
+
+function addArchitectButtonsToMessage(messageElement) {
+  const isArchitectMessage = messageElement.innerText.includes("архитектор") || messageElement.innerText.includes("Architect");
+
+  if (!isArchitectMessage) return;
+
+  const container = document.createElement("div");
+  container.style.marginTop = "8px";
+
+  const saveMapButton = document.createElement("button");
+  saveMapButton.innerText = "🗺 Сохранить карту";
+  saveMapButton.onclick = () => fetch("/.netlify/functions/save-map").then(() => alert("Карта отправлена на сохранение."));
+
+  const backupButton = document.createElement("button");
+  backupButton.innerText = "💾 Сохранить все файлы";
+  backupButton.onclick = () => fetch("/.netlify/functions/backup-all").then(() => alert("Файлы отправлены на сохранение."));
+
+  [saveMapButton, backupButton].forEach(btn => {
+    btn.style.marginRight = "8px";
+    btn.style.padding = "6px 12px";
+    btn.style.borderRadius = "6px";
+    btn.style.border = "none";
+    btn.style.cursor = "pointer";
+    btn.style.backgroundColor = "#e0e0e0";
+  });
+
+  container.appendChild(saveMapButton);
+  container.appendChild(backupButton);
+  messageElement.appendChild(container);
+}
+
+// Автоматически следим за появлением новых сообщений
+const observer = new MutationObserver((mutationsList) => {
+  for (const mutation of mutationsList) {
+    mutation.addedNodes.forEach((node) => {
+      if (node.nodeType === 1 && node.classList.contains("message")) {
+        addArchitectButtonsToMessage(node);
+      }
+    });
+  }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
