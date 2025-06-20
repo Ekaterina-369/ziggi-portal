@@ -91,31 +91,3 @@ exports.handler = async function(event) {
     };
   }
 };
-
-document.getElementById("architect-send").addEventListener("click", async () => {
-  const input = document.getElementById("architect-input").value.trim();
-  const responseDiv = document.getElementById("architect-response");
-
-  if (!input) return;
-
-  responseDiv.innerHTML = "⌛️ Думаю...";
-
-  try {
-    const res = await fetch("/.netlify/functions/deepseek", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: input })
-    });
-
-    const data = await res.json();
-    const reply = data.reply;
-
-    const messageBlock = document.createElement("div");
-    messageBlock.className = "message";
-    messageBlock.innerHTML = `<strong>Архитектор:</strong><br>${reply}`;
-    responseDiv.innerHTML = "";
-    responseDiv.appendChild(messageBlock);
-  } catch (e) {
-    responseDiv.innerHTML = "Ошибка при получении ответа";
-  }
-});
