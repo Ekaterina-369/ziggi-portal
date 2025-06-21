@@ -1,29 +1,27 @@
-import axios from 'axios';
-
 export async function handler(event) {
   try {
     const { messages, model, temperature } = JSON.parse(event.body);
 
-    const response = await axios.post(
-      'https://openrouter.ai/api/v1/chat/completions',
-      {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://ziggi-portal.netlify.app',
+        'X-Title': 'Ziggi Portal',
+      },
+      body: JSON.stringify({
         model: model || 'deepseek-chat',
         messages,
         temperature: temperature || 0.7,
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://ziggi-portal.netlify.app',
-          'X-Title': 'Ziggi Portal',
-        },
-      }
-    );
+      }),
+    });
+
+    const data = await response.json();
 
     return {
       statusCode: 200,
-      body: JSON.stringify(response.data),
+      body: JSON.stringify(data),
     };
   } catch (error) {
     console.error('Ошибка при вызове DeepSeek API:', error);
@@ -33,4 +31,3 @@ export async function handler(event) {
     };
   }
 }
-
