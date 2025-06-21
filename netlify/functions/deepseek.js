@@ -1,13 +1,13 @@
-const axios = require('axios');
+import axios from 'axios';
 
-exports.handler = async function (event) {
+export async function handler(event) {
   try {
     const { messages, model, temperature } = JSON.parse(event.body);
 
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: model || 'deepseek-chat', // можно указать модель явно
+        model: model || 'deepseek-chat',
         messages,
         temperature: temperature || 0.7,
       },
@@ -26,10 +26,11 @@ exports.handler = async function (event) {
       body: JSON.stringify(response.data),
     };
   } catch (error) {
-    console.error('DeepSeek error:', error.message);
+    console.error('Ошибка при вызове DeepSeek API:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Ошибка DeepSeek API' }),
+      body: JSON.stringify({ error: error.message || 'Ошибка API' }),
     };
   }
-};
+}
+
