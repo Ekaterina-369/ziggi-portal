@@ -50,7 +50,6 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${safeReply}`;
   }
 
-
     chatBox.appendChild(messageBlock); // 👈 Показываем ответ Зигги
     chatBox.scrollTop = chatBox.scrollHeight;
   } catch (err) {
