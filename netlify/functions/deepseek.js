@@ -34,12 +34,3 @@ export async function handler(event) {
     };
   }
 }
-
-  } catch (error) {
-    console.error('Ошибка при вызове DeepSeek API:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message || 'Ошибка API' }),
-    };
-  }
-}
