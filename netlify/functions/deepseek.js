@@ -1,6 +1,6 @@
 export async function handler(event) {
   try {
-    const { messages, model, temperature } = JSON.parse(event.body);
+    const { prompt } = JSON.parse(event.body);
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -11,18 +11,30 @@ export async function handler(event) {
         'X-Title': 'Ziggi Portal',
       },
       body: JSON.stringify({
-        model: model || 'deepseek-chat',
-        messages,
-        temperature: temperature || 0.7,
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.7,
       }),
     });
 
     const data = await response.json();
+    const reply = data.choices?.[0]?.message?.content || '';
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify({ reply })
     };
+  } catch (error) {
+    console.error('Ошибка при вызове DeepSeek API:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message || 'Ошибка API' })
+    };
+  }
+}
+
   } catch (error) {
     console.error('Ошибка при вызове DeepSeek API:', error);
     return {
