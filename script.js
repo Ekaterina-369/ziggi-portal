@@ -42,13 +42,14 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     const messageBlock = document.createElement("div");
     messageBlock.className = "message";
 
-      if (reply && reply.includes("```")) {
+       if (reply && reply.includes("```")) {
     const codeContent = reply.split("```")[1].replace(/^javascript\n/, "");
     messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong><pre><code>${codeContent}</code></pre>`;
   } else {
     const safeReply = reply ?? "Нет ответа от сервера";
     messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${safeReply}`;
   }
+
 
     chatBox.appendChild(messageBlock); // 👈 Показываем ответ Зигги
     chatBox.scrollTop = chatBox.scrollHeight;
