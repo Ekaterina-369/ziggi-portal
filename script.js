@@ -30,21 +30,9 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   userBlock.innerHTML = `<strong>Ты:</strong> ${message}`;
   chatBox.appendChild(userBlock);
 
-  let model;
-  let prompt;
-
-  if (message.toLowerCase().includes("через другую модель")) {
-    const models = ["deepseek"];
-    const currentIndex = models.indexOf(lastModel);
-    model = models[(currentIndex + 1) % models.length];
-    prompt = lastPrompt;
-  } else {
-    model = chooseModel(message); // 🔮 Живой выбор
-    prompt = message;
-    lastPrompt = message;
-  }
-
-  lastModel = model;
+  model = "deepseek";
+  prompt = message;
+  lastPrompt = message;
 
   try {
     const reply = await sendToModel(model, prompt);
