@@ -163,10 +163,32 @@ setInterval(injectButtonsToMessages, 1000);
 document.addEventListener("DOMContentLoaded", () => {
   const architectButton = document.getElementById("toggle-architect");
   const panel = document.getElementById("architect-panel");
+  const sendBtn = document.getElementById("architect-send");
+  const input = document.getElementById("architect-input");
+  const responseBox = document.getElementById("architect-response");
 
   if (architectButton && panel) {
     architectButton.addEventListener("click", () => {
       panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+  }
+
+  if (sendBtn) {
+    sendBtn.addEventListener("click", async () => {
+      const message = input.value.trim();
+      if (!message) return;
+
+      try {
+        const res = await fetch("/.netlify/functions/architect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        responseBox.textContent = data.reply || "Нет ответа от сервера";
+      } catch (err) {
+        responseBox.textContent = "Ошибка: " + err.message;
+      }
     });
   }
 });
