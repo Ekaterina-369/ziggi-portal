@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 export async function handler(event) {
   try {
     const { messages, model, temperature } = JSON.parse(event.body);
