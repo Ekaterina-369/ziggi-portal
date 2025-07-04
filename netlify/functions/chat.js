@@ -14,7 +14,7 @@ exports.handler = async (event) => {
   try {
     const { prompt } = JSON.parse(event.body || "{}");
     const res = await axios.post(
-      "https://api.openrouter.ai/v1/chat/completions",
+      "process.env.OPENROUTER_API_URL",
       {
         model: "tngtech/deepseek-r1t-chimera:free",
         messages: [
@@ -25,7 +25,6 @@ exports.handler = async (event) => {
       {
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "https://ziggi-portal.netlify.app/"
         }
       }
     );
