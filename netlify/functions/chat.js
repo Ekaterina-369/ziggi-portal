@@ -11,16 +11,6 @@
 const axios = require("axios");
 
 exports.handler = async (event) => {
-  const { model, prompt } = JSON.parse(event.body || "{}");
-
-  try {
-    // 📦 Блок DeepSeek — теперь говорит по-русски, дружелюбно и с обращением к Катюше
-    if (model === "deepseek" || model === "default") {
-      const safePrompt = prompt.length < 20 ? `Поясни, пожалуйста: ${prompt}` : prompt;
-
-      const axios = require("axios");
-
-exports.handler = async (event) => {
   try {
     const { prompt } = JSON.parse(event.body || "{}");
     const res = await axios.post(
@@ -42,18 +32,5 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: JSON.stringify({ reply: res.data.choices[0].message.content }) };
   } catch (e) {
     return { statusCode: 500, body: JSON.stringify({ error: "DeepSeek спит: " + e.message }) };
-  }
-};
-
-  
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Неизвестная модель" })
-    };
-  } catch (e) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ reply: "Ошибка при обработке запроса: " + e.message })
-    };
   }
 };
