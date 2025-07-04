@@ -45,14 +45,7 @@ exports.handler = async (event) => {
   }
 };
 
-    // 🚫 Блок DuckDuckGo временно отключён
-    if (model === "duckduckgo") {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "DuckDuckGo временно отключён" })
-      };
-    }
-
+  
     return {
       statusCode: 400,
       body: JSON.stringify({ error: "Неизвестная модель" })
