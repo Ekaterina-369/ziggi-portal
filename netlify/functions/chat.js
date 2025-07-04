@@ -14,7 +14,7 @@ exports.handler = async (event) => {
   try {
     const { prompt } = JSON.parse(event.body || "{}");
     const res = await axios.post(
-      "process.env.OPENROUTER_API_URL",
+      process.env.OPENROUTER_API_URL,
       {
         model: "tngtech/deepseek-r1t-chimera:free",
         messages: [
