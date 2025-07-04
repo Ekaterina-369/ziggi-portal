@@ -13,37 +13,6 @@ const axios = require("axios");
 exports.handler = async (event) => {
   const { model, prompt } = JSON.parse(event.body || "{}");
 
-  // 📦 Блок Сохранения в Жевачку
-  if (/^Сохрани в .+?:/.test(prompt)) {
-    try {
-      const response = await fetch("/.netlify/functions/saveToDrive", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ text: prompt })
-      });
-
-      const data = await response.json();
-      const reply = data.message || "✅ Всё сохранено!";
-
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply })
-      };
-    } catch (err) {
-      console.error("Ошибка при сохранении в Жевачку:", err.response?.data || err.message);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          reply: "❌ Не удалось сохранить в Жевачку. " + (typeof err.response?.data === "object"
-            ? JSON.stringify(err.response.data)
-            : err.response?.data || err.message)
-        })
-      };
-    }
-  }
-
   try {
     // 📦 Блок DeepSeek — теперь говорит по-русски, дружелюбно и с обращением к Катюше
     if (model === "deepseek" || model === "default") {
@@ -55,7 +24,7 @@ exports.handler = async (event) => {
   try {
     const { prompt } = JSON.parse(event.body || "{}");
     const res = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
+      "https://api.openrouter.ai/v1/chat/completions",
       {
         model: "tngtech/deepseek-r1t-chimera:free",
         messages: [
