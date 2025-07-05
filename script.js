@@ -22,9 +22,9 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   const input = document.getElementById("chat-input");
   const message = input.value.trim();
-  if (loading) return;
-  loading = true;
-  if (!message) return;
+  if (!message) return;    // <<< Сначала проверяем пустоту
+  if (loading) return;     // <<< Потом — флаг загрузки
+  loading = true;          // <<< И только теперь выставляем его
 
   const chatBox = document.getElementById("chat-box");
   const userBlock = document.createElement("div");
