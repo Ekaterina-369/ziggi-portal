@@ -27,7 +27,7 @@ const architectNotes = body.architect || "";
   const { data: treeData } = await octokit.git.getTree({
     owner:       process.env.GITHUB_OWNER,
     repo:        process.env.GITHUB_REPO,
-  + tree_sha:   treeSha,
+    tree_sha:   treeSha,
     recursive:   "true"
    });
   
