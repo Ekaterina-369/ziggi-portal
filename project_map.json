@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-07-05T20:40:06.001Z",
+  "generatedAt": "2025-07-05T20:47:43.035Z",
   "files": [
     {
       "path": "favicon.ico",
@@ -63,6 +63,10 @@
     },
     {
       "path": "package.json",
+      "type": "blob"
+    },
+    {
+      "path": "project_map.json",
       "type": "blob"
     },
     {
