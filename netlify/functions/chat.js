@@ -14,7 +14,6 @@ exports.handler = async (event) => {
   console.log("💬 CHAT handler invoked, body:", event.body);
 console.log("💬 CHAT URL:", process.env.OPENROUTER_API_URL);
 console.log("💬 CHAT KEY length:", process.env.OPENROUTER_API_KEY?.length);
-    };
 
   try {
     const { prompt } = JSON.parse(event.body || "{}");
@@ -34,7 +33,6 @@ console.log("💬 CHAT KEY length:", process.env.OPENROUTER_API_KEY?.length);
       }
     );
     return { statusCode: 200, body: JSON.stringify({ reply: res.data.choices[0].message.content }) };
-  } catch (e) {
       } catch (e) {
     console.error("🔥 CHAT ERROR статус/данные:", e.response?.status, e.response?.data);
     console.error("🔥 CHAT ERROR сообщение:", e.message);
