@@ -1,41 +1,48 @@
-const fs = require("fs");
-const path = require("path");
 const axios = require("axios");
-
-function scanProject(dir, ignore = ["node_modules", ".git", "netlify/functions"]) {
-  let map = {};
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    const relative = path.relative(".", fullPath);
-    if (ignore.includes(entry.name)) continue;
-    if (entry.isDirectory()) {
-      Object.assign(map, scanProject(fullPath, ignore));
-    } else if (entry.isFile() && /\.(js|html|css|json|txt)$/.test(entry.name)) {
-      map[relative] = {
-        size: fs.statSync(fullPath).size,
-        preview: fs.readFileSync(fullPath, "utf8").slice(0, 1000)
-      };
-    }
-  }
-  return map;
-}
+const { Octokit } = require("@octokit/rest");
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 exports.handler = async function(event) {
   try {
     const body = JSON.parse(event.body || '{}');
     const userMessage = body.message || "Что нужно исправить?";
 
-    // Шаг 1: построить карту проекта
-    const fileMap = scanProject(".");
+       // Шаг 1: получить дерево файлов из GitHub
+  const { data: treeData } = await octokit.git.getTree({
+    owner: process.env.GITHUB_OWNER,
+    repo:  process.env.GITHUB_REPO,
+    recursive: "true"
+  });
 
-    // Шаг 2: сохранить карту в project_map.json
-    fs.writeFileSync("project_map.json", JSON.stringify({
-      generatedAt: new Date().toISOString(),
-      files: fileMap
-    }, null, 2));
+  const projectMap = {
+    generatedAt: new Date().toISOString(),
+    files: treeData.tree.map(item => ({ path: item.path, type: item.type }))
+  };
 
-    // Шаг 3: выбрать до 3 файлов для анализа
+  // Шаг 2: залить project_map.json в репозиторий
+  const content = Buffer.from(JSON.stringify(projectMap, null, 2)).toString("base64");
+  let sha;
+  try {
+    const existing = await octokit.repos.getContent({
+      owner: process.env.GITHUB_OWNER,
+      repo:  process.env.GITHUB_REPO,
+      path:  "project_map.json"
+    });
+    sha = existing.data.sha;
+  } catch {
+    // если файла ещё нет, sha не нужен
+  }
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner: process.env.GITHUB_OWNER,
+    repo:  process.env.GITHUB_REPO,
+    path:  "project_map.json",
+    message: "Обновить карту проекта",
+    content,
+    ...(sha ? { sha } : {})
+  });
+
+    // Шаг 2: выбрать до 3 файлов для анализа
     const sampleFiles = Object.entries(fileMap)
       .filter(([_, data]) => data.size < 10000)
       .slice(0, 3);
@@ -43,7 +50,7 @@ exports.handler = async function(event) {
     const fileDescriptions = sampleFiles.map(([name, data]) =>
       `Файл: ${name}\n---\n${data.preview}`).join("\n\n");
 
-    // Шаг 4: systemMessage для DeepSeek
+    // Шаг 3: systemMessage для DeepSeek
     const systemMessage = `
 Ты — Архитектор проекта. Пользователь не умеет программировать.
 
@@ -58,7 +65,7 @@ exports.handler = async function(event) {
 \`\`\`
 `.trim();
 
-    // Шаг 5: запрос к DeepSeek через OpenRouter
+    // Шаг 4: запрос к DeepSeek через OpenRouter
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
