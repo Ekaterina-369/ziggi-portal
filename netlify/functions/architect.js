@@ -5,7 +5,12 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 exports.handler = async function(event) {
   try {
     const body = JSON.parse(event.body || '{}');
-    const userMessage = body.message || "Что нужно исправить?";
+const userMessage = body.prompt 
+  || body.message 
+  || "Что нужно исправить?";
+const architectNotes = body.architect || "";
+
+    
 
        // Шаг 1: получить дерево файлов из GitHub
   const { data: treeData } = await octokit.git.getTree({
@@ -70,7 +75,8 @@ exports.handler = async function(event) {
         model: "deepseek-coder:33b",
         messages: [
           { role: "system", content: `${systemMessage}\n\n${fileDescriptions}` },
-          { role: "user", content: userMessage }
+           { role: "user",   content: userMessage },
+  { role: "assistant", content: "ARCHITECT: " + architectNotes }
         ]
       },
       {
