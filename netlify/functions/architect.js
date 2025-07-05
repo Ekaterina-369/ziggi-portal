@@ -15,15 +15,22 @@ const userMessage = body.prompt
   || "Что нужно исправить?";
 const architectNotes = body.architect || "";
 
-    
-
-       // Шаг 1: получить дерево файлов из GitHub
-  const { data: treeData } = await octokit.git.getTree({
-    owner: process.env.GITHUB_OWNER,
-    repo:  process.env.GITHUB_REPO,
-    recursive: "true"
+     // Шаг 1.1: узнать SHA текущей ветки main
+  const { data: branchData } = await octokit.repos.getBranch({
+   owner: process.env.GITHUB_OWNER,
+   repo:  process.env.GITHUB_REPO,
+   branch: "main"
   });
+  const treeSha = branchData.commit.commit.tree.sha;
 
+   // Шаг 1.2: получить полное дерево по SHA
+  const { data: treeData } = await octokit.git.getTree({
+    owner:       process.env.GITHUB_OWNER,
+    repo:        process.env.GITHUB_REPO,
+  + tree_sha:   treeSha,
+    recursive:   "true"
+   });
+  
   const projectMap = {
     generatedAt: new Date().toISOString(),
     files: treeData.tree.map(item => ({ path: item.path, type: item.type }))
