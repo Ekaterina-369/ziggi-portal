@@ -15,7 +15,6 @@
 /* НАЧАЛО: 💬 Обработка формы ввода, выбор модели и вывод ответа
   🔐 Этот блок слушает форму ввода, создаёт сообщение от пользователя, выбирает подходящую ИИ-модель, отправляет ей запрос и показывает ответ Зигги в чате */
 let lastPrompt = "";
-let lastModel = "";
 
 document.getElementById("chat-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -151,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await fetch("/.netlify/functions/architect", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
+          body: JSON.stringify({ prompt: message  })
         });
         const data = await res.json();
         responseBox.textContent = data.reply || "Нет ответа от сервера";
