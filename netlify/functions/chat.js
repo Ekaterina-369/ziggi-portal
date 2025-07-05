@@ -11,6 +11,9 @@
 const axios = require("axios");
 
 exports.handler = async (event) => {
+  console.log("💬 CHAT handler invoked, body:", event.body);
+console.log("💬 CHAT URL:", process.env.OPENROUTER_API_URL);
+console.log("💬 CHAT KEY length:", process.env.OPENROUTER_API_KEY?.length);
   try {
     const { prompt } = JSON.parse(event.body || "{}");
     const res = await axios.post(
