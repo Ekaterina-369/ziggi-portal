@@ -30,25 +30,30 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   userBlock.innerHTML = `<strong>Ты:</strong> ${message}`;
   chatBox.appendChild(userBlock);
 
-  model = "deepseek";
-  prompt = message;
-  lastPrompt = message;
+ // Разделяем ввод на две строки: первая — обычный чат, вторая — архитектор
+ const [userPrompt, architectPrompt] = message.split("\n", 2);
+ lastPrompt = userPrompt;
 
-  try {
-    const reply = await sendToModel(model, prompt);
-    const modelName = model === "deepseek" ? "DeepSeek" :
-                      "DuckDuckGo";
+ // Выбираем, куда слать запрос
+ const fnName = architectPrompt
+   ? "architect"
+   : "chat";
+ const payload = architectPrompt
+   ? { prompt: userPrompt, architect: architectPrompt }
+   : { prompt: userPrompt };
 
-    const messageBlock = document.createElement("div");
-    messageBlock.className = "message";
-
-       if (reply && reply.includes("```")) {
-    const codeContent = reply.split("```")[1].replace(/^javascript\n/, "");
-    messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong><pre><code>${codeContent}</code></pre>`;
-  } else {
-    const safeReply = reply ?? "Нет ответа от сервера";
-    messageBlock.innerHTML = `<strong>Зигги (${modelName}):</strong> ${safeReply}`;
-  }
+ try {
+   const res = await fetch(
+     `/.netlify/functions/${fnName}`,
+     {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify(payload)
+     }
+   );
+   if (!res.ok) throw new Error("Сбой на сервере");
+   const data = await res.json();
+   const reply = data.reply || "Нет ответа от сервера";
 
     chatBox.appendChild(messageBlock); // 👈 Показываем ответ Зигги
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -63,35 +68,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 });
 /* КОНЕЦ: 💬 Обработка формы ввода, выбор модели и вывод ответа */
 
-/* НАЧАЛО: 🤖 Выбор модели на основе запроса
-  🔐 Этот блок анализирует сообщение пользователя, находит ключевые слова и решает, какой ИИ лучше всего подойдёт: ChatGPT, YandexGPT, DeepSeek или DuckDuckGo */
 
-  function chooseModel(message) {
-  const lower = message.toLowerCase();
-  const models = {
-    deepseek: ["китаец", "deepseek", "китай", "китайский", "deepl", "переведи", "портал", "ии", "искусственный интеллект", "оживление", "творчество", "свобода"],
-    duckduckgo: ["найди", "интернет"]
-  };
-  const scores = {
-    deepseek: 0,
-    duckduckgo: 0
-  };
-    
-  if (lower.includes("портал") || lower.includes("ии") || lower.includes("искусственный интеллект") || lower.includes("китаец") || lower.includes("творчество") || lower.includes("свобода")) {
-    scores.deepseek += 2;
-  }
-
-  if (lower.includes("найди") || lower.includes("интернет")) {
-    scores.duckduckgo += 2;
-  }
-
-  const bestModel = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
-  return bestModel[1] > 0 ? bestModel[0] : "deepseek";
-}
-/* КОНЕЦ: 🤖 Выбор модели на основе запроса */
-
-/* НАЧАЛО: 🚀 Отправка запроса на сервер и получение ответа
-  Эта функция отправляет выбранной модели текст запроса и получает её ответ */
 async function sendToModel(model, prompt) {
   const response = await fetch("/.netlify/functions/" + model, {
     method: "POST",
