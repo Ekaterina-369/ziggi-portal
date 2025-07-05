@@ -14,6 +14,7 @@
 
 /* НАЧАЛО: 💬 Обработка формы ввода, выбор модели и вывод ответа
   🔐 Этот блок слушает форму ввода, создаёт сообщение от пользователя, выбирает подходящую ИИ-модель, отправляет ей запрос и показывает ответ Зигги в чате */
+let loading = false;
 let lastPrompt = "";
 
 document.getElementById("chat-form").addEventListener("submit", async (e) => {
@@ -21,6 +22,8 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   const input = document.getElementById("chat-input");
   const message = input.value.trim();
+  if (loading) return;
+  loading = true;
   if (!message) return;
 
   const chatBox = document.getElementById("chat-box");
@@ -61,6 +64,9 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
     chatBox.appendChild(messageBlock); // 👈 Показываем ответ Зигги
     chatBox.scrollTop = chatBox.scrollHeight;
+    loading = false;
+    input.value = ""; // очищаем поле ввода
+
   } catch (err) {
     const errorBlock = document.createElement("div");
     errorBlock.className = "message";
@@ -68,6 +74,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     errorBlock.innerHTML = `<strong>Ошибка:</strong> ${err.message}`;
     chatBox.appendChild(errorBlock);
     chatBox.scrollTop = chatBox.scrollHeight;
+    loading = false;
   }
 });
 /* КОНЕЦ: 💬 Обработка формы ввода, выбор модели и вывод ответа */
