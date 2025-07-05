@@ -84,7 +84,7 @@ const architectNotes = body.architect || "";
     const response = await axios.post(
       process.env.OPENROUTER_API_URL,
       {
-        model: "deepseek-coder:33b",
+        model: "tngtech/deepseek-r1t-chimera:free",
         messages: [
           { role: "system", content: `${systemMessage}\n\n${fileDescriptions}` },
            { role: "user",   content: userMessage },
