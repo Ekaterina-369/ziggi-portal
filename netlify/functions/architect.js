@@ -32,6 +32,12 @@ exports.handler = async function(event) {
   } catch {
     // если файла ещё нет, sha не нужен
   }
+    
+    // Шаг 3: взять первые 3 пути из карты
+   const fileDescriptions = projectMap.files
+     .slice(0, 3)
+     .map(f => `Файл: ${f.path}`)
+     .join("\n\n");
 
   await octokit.repos.createOrUpdateFileContents({
     owner: process.env.GITHUB_OWNER,
@@ -42,15 +48,7 @@ exports.handler = async function(event) {
     ...(sha ? { sha } : {})
   });
 
-    // Шаг 2: выбрать до 3 файлов для анализа
-    const sampleFiles = Object.entries(fileMap)
-      .filter(([_, data]) => data.size < 10000)
-      .slice(0, 3);
-
-    const fileDescriptions = sampleFiles.map(([name, data]) =>
-      `Файл: ${name}\n---\n${data.preview}`).join("\n\n");
-
-    // Шаг 3: systemMessage для DeepSeek
+    // Шаг 4: systemMessage для DeepSeek
     const systemMessage = `
 Ты — Архитектор проекта. Пользователь не умеет программировать.
 
@@ -65,9 +63,9 @@ exports.handler = async function(event) {
 \`\`\`
 `.trim();
 
-    // Шаг 4: запрос к DeepSeek через OpenRouter
+    // Шаг 5: запрос к DeepSeek через OpenRouter
     const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
+      process.env.OPENROUTER_API_URL,
       {
         model: "deepseek-coder:33b",
         messages: [
