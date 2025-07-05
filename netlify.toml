@@ -1,3 +1,5 @@
+[functions."architect"]
+timeout = 30
 
 [build]
   publish = "."
