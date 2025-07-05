@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2025-07-05T20:40:06.001Z",
+  "files": [
+    {
+      "path": "favicon.ico",
+      "type": "blob"
+    },
+    {
+      "path": "index.html",
+      "type": "blob"
+    },
+    {
+      "path": "injectButtons.js",
+      "type": "blob"
+    },
+    {
+      "path": "memory",
+      "type": "tree"
+    },
+    {
+      "path": "memory/chat.js.backup",
+      "type": "blob"
+    },
+    {
+      "path": "memory/hydrangeas_background.jpg",
+      "type": "blob"
+    },
+    {
+      "path": "netlify.toml",
+      "type": "blob"
+    },
+    {
+      "path": "netlify",
+      "type": "tree"
+    },
+    {
+      "path": "netlify/functions",
+      "type": "tree"
+    },
+    {
+      "path": "netlify/functions/architect.js",
+      "type": "blob"
+    },
+    {
+      "path": "netlify/functions/backup-all.js",
+      "type": "blob"
+    },
+    {
+      "path": "netlify/functions/chat.js",
+      "type": "blob"
+    },
+    {
+      "path": "netlify/functions/project_map.json",
+      "type": "blob"
+    },
+    {
+      "path": "netlify/functions/save-map.js",
+      "type": "blob"
+    },
+    {
+      "path": "netlify/functions/saveToDrive.js",
+      "type": "blob"
+    },
+    {
+      "path": "package.json",
+      "type": "blob"
+    },
+    {
+      "path": "script.js",
+      "type": "blob"
+    },
+    {
+      "path": "style.css",
+      "type": "blob"
+    }
+  ]
+}
