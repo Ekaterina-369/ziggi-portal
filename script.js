@@ -54,6 +54,11 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
    if (!res.ok) throw new Error("Сбой на сервере");
    const data = await res.json();
    const reply = data.reply || "Нет ответа от сервера";
+      // 🛠 формируем блок с ответом
+   const label = fnName === "chat" ? "DeepSeek" : "Архитектор";
+   const messageBlock = document.createElement("div");
+   messageBlock.className = "message";
+   messageBlock.innerHTML = `<strong>${label}:</strong> ${reply}`;
 
     chatBox.appendChild(messageBlock); // 👈 Показываем ответ Зигги
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -67,19 +72,6 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   }
 });
 /* КОНЕЦ: 💬 Обработка формы ввода, выбор модели и вывод ответа */
-
-
-async function sendToModel(model, prompt) {
-  const response = await fetch("/.netlify/functions/" + model, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt })
-  });
-  if (!response.ok) throw new Error("Сбой на сервере");
-  const data = await response.json();
-  return data.reply;
-}
-/* КОНЕЦ: 🚀 Отправка запроса на сервер и получение ответа */
 
 /* НАЧАЛО: 📎 Работа с прикреплёнными файлами
   🔐 Обрабатывает изображение, текстовый файл и документ Word, и отображает его в чате */
