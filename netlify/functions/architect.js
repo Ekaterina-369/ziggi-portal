@@ -3,6 +3,11 @@ const { Octokit } = require("@octokit/rest");
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 exports.handler = async function(event) {
+  console.log("🏗️ ARCH: handler invoked, body:", event.body);
+  console.log("🏗️ ARCH: OWNER =", process.env.GITHUB_OWNER);
+  console.log("🏗️ ARCH: REPO  =", process.env.GITHUB_REPO);
+  console.log("🏗️ ARCH: TOKEN length:", process.env.GITHUB_TOKEN?.length);
+
   try {
     const body = JSON.parse(event.body || '{}');
 const userMessage = body.prompt 
@@ -96,6 +101,7 @@ const architectNotes = body.architect || "";
     };
 
   } catch (e) {
+    console.error("🔥 ARCH ERROR:", e.response?.status, e.response?.data || e.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: e.message })
