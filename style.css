@@ -102,10 +102,13 @@ pre code {
 
 /* Файловый инпут и кнопки */
 #chat-form button,
-#architect-form button {
+#architect-form button 
+#chat-form input[type="file"]::file-selector-button,
+#architect-form input[type="file"]::file-selector-button {
   height: 44px;            
   padding: 0 16px;          
   font-size: 16px;
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
   cursor: pointer;
