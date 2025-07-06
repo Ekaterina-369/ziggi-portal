@@ -100,17 +100,40 @@ pre code {
   border-radius: 8px;
 }
 
-/* Файловый инпут и кнопки */
-#chat-form button,
-#architect-form button 
+/* Компактная кнопка выбора файла */
 #chat-form input[type="file"]::file-selector-button,
 #architect-form input[type="file"]::file-selector-button {
-  height: 44px;            
-  padding: 0 16px;          
+  background: #fff;           /* белый фон, как у полей */
+  border: 1px solid #ccc;     /* та же рамка */
+  border-radius: 8px;
+  height: 44px;               /* ровно высота поля */
+  padding: 0 12px;            /* узкие боковины */
   font-size: 16px;
+  cursor: pointer;
+}
+
+/* Сам инпут не растягиваем */
+#chat-form input[type="file"],
+#architect-form input[type="file"] {
+  width: auto !important;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+}
+
+/* Большие кнопки «Отправить» */
+#chat-form button,
+#architect-form button {
+  display: inline-block;
+  width: auto;                 /* если хотите, чтобы была только кнопка */
+  /* или width: 100%; max-width: 200px; если хотите чуть растянуть */
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
+  height: 44px;
+  padding: 0 20px;             /* более широкие боковины */
+  font-size: 16px;
   cursor: pointer;
 }
 
