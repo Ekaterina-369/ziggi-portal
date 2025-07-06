@@ -27,7 +27,7 @@
     <div id="chat-box"></div>
   </div>
 
-  <!-- 📝 Поле ввода сообщений -->
+  <!-- 📝 Поле ввода сообщений Зигги -->
   <div id="input-container">
     <form id="chat-form">
       <input type="text" id="chat-input" placeholder="Напиши Зигги..." />
@@ -39,8 +39,15 @@
     <button id="toggle-architect" style="font-size: 12px; margin-top: 12px; opacity: 0.9; background: white; border: 1px dashed #666; padding: 6px 12px; border-radius: 6px; cursor: pointer; width: auto;">
       Архитектор
     </button>
-  </div>
-  <!-- 🔧 Панель архитектора -->
+    
+  <!-- 🔧 Поле ввода сообщений Архи-->
+  <div id="input-container">
+   <form id="architect-form">
+     <input type="text" id="architect-input" placeholder="Напиши Архи..." />
+     <input type="file" id="architect-file-input" />
+    <button type="submit">Отправить</button>
+   </form>
+ 
 <div id="architect-panel" style="display: none;">
   <textarea id="architect-input" placeholder="Введите запрос архитектору..." style="width: 90%; height: 100px; margin: 10px;"></textarea>
   <button id="architect-send" style="margin-bottom: 10px;">Отправить</button>
