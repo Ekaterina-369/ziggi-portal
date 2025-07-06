@@ -112,6 +112,17 @@ pre code {
   cursor: pointer;
 }
 
+/* Стили для превью загруженного файла */
+.file-preview {
+  display: none;       /* скрыто до загрузки */
+  max-width: 100px;    /* уменьшили в 10× (пример) */
+  height: auto;        /* сохраняем пропорции */
+  margin-left: 10px;   /* отступ от кнопки */
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+
 /* Сам инпут не растягиваем */
 #chat-form input[type="file"],
 #architect-form input[type="file"] {
