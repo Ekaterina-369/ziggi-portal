@@ -76,11 +76,11 @@ pre code {
 #chat-form, 
 #architect-form {
   display: flex;
-  align-items: center;      /* выравниваем по центру по высоте */
+  align-items: center;      
   gap: 10px;
   width: 100%;
   max-width: 800px;
-  margin-top: 10px;         /* чуть отступа между формами */
+  margin-top: 10px;         
 }
 
 /* Текстовые поля */
