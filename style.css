@@ -112,17 +112,6 @@ pre code {
   cursor: pointer;
 }
 
-/* Стили для превью загруженного файла */
-#chat-preview,
-#architect-preview {
-  max-width: 80px !important;   /* максимально 80px по ширине */
-  max-height: 80px !important;  /* и 80px по высоте */
-  width: auto !important;       /* сохраняем пропорции */
-  height: auto !important;
-  display: inline-block;        /* чтобы не растягивалось */
-}
-
-
 /* Сам инпут не растягиваем */
 #chat-form input[type="file"],
 #architect-form input[type="file"] {
@@ -146,6 +135,16 @@ pre code {
   padding: 0 20px;             /* более широкие боковины */
   font-size: 16px;
   cursor: pointer;
+}
+
+/* Уменьшаем все картинки в чате до максимально 150px по ширине */
+#chat-box img {
+  max-width: 150px;   /* или 100px, или сколько вам нужно */
+  max-height: 150px;  /* чтобы не вытягивалось по высоте */
+  width: auto;
+  height: auto;
+  display: inline-block;
+  margin: 4px 0;
 }
 
 #white-strip {
