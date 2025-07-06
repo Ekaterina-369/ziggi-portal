@@ -1,3 +1,9 @@
+/* 1️⃣ Всех элементов единая модель «box-border», чтобы
+       height включал в себя padding и border */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* 🌺 Основной фон всей страницы с гортензиями */
 body {
   margin: 0;
@@ -88,7 +94,7 @@ pre code {
 #architect-input {
   flex: 1;                  
   height: 44px;             
-  padding: 10px;
+  padding: 0 12px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
