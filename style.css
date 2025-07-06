@@ -101,8 +101,6 @@ pre code {
 }
 
 /* Файловый инпут и кнопки */
-#chat-form input[type="file"],
-#architect-form input[type="file"],
 #chat-form button,
 #architect-form button {
   height: 44px;            
