@@ -86,8 +86,8 @@ pre code {
 /* Текстовые поля */
 #chat-input, 
 #architect-input {
-  flex: 1;                  /* растягиваем по оставшейся ширине */
-  height: 44px;             /* фиксированная высота */
+  flex: 1;                  
+  height: 44px;             
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -99,8 +99,8 @@ pre code {
 #architect-form input[type="file"],
 #chat-form button,
 #architect-form button {
-  height: 44px;             /* та же высота, что и у текстового поля */
-  padding: 0 16px;          /* вертикальных паддингов нет — высота фиксирована */
+  height: 44px;            
+  padding: 0 16px;          
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
