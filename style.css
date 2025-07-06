@@ -70,54 +70,41 @@ pre code {
   border-top: 1px solid white;
 }
 
-#chat-form {   <!-- Расположение самой формы Зигги, в одну линию -->
+/* Флекс-строка для обеих форм ввода запроса Зигги и Архи */
+#chat-form, 
+#architect-form {
   display: flex;
-  max-width: 800px;
-  width: 100%;
+  align-items: center;      /* выравниваем по центру по высоте */
   gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 10px;         /* чуть отступа между формами */
 }
 
-#chat-input {    <!--Оформление текстового поля Зигги, задаёт высоту, закругления и отступы внутри поля ввода  -->
-  flex: 1;
+/* Текстовые поля */
+#chat-input, 
+#architect-input {
+  flex: 1;                  /* растягиваем по оставшейся ширине */
+  height: 44px;             /* фиксированная высота */
   padding: 10px;
   font-size: 16px;
-  border-radius: 8px;
   border: 1px solid #ccc;
-}
-
-/* ————————————————
-   Стили для формы Архитектора,
-   повторяют оформление формы Зигги
-   ———————————————— */
-
-#architect-form {    
-  display: flex;
-  max-width: 800px;
-  width: 100%;
-  gap: 10px;
-}
-
-#architect-input {    
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
   border-radius: 8px;
-  border: 1px solid #ccc;
 }
 
-/* Стили для выбора файла и кнопки отправки */
+/* Файловый инпут и кнопки */
+#chat-form input[type="file"],
 #architect-form input[type="file"],
+#chat-form button,
 #architect-form button {
-  padding: 10px 14px;
+  height: 44px;             /* та же высота, что и у текстового поля */
+  padding: 0 16px;          /* вертикальных паддингов нет — высота фиксирована */
   font-size: 16px;
-  border-radius: 8px;
   border: 1px solid #ccc;
+  border-radius: 8px;
   background: #fff;
   cursor: pointer;
 }
-
-
-
 
 #white-strip {
   background: rgba(255, 255, 255, 0.95);
