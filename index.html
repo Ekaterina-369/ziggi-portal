@@ -49,6 +49,24 @@
   <script src="injectButtons.js"></script>
   <script src="script.js"></script>
 <script src="structure_map.js"></script>
-  
+
+  <script>
+  function setupPreview(inputId, imgId) {
+    const inp = document.getElementById(inputId);
+    const img = document.getElementById(imgId);
+    inp.addEventListener('change', () => {
+      const file = inp.files[0];
+      if (file) {
+        img.src = URL.createObjectURL(file);
+        img.style.display = 'inline-block';
+      } else {
+        img.style.display = 'none';
+      }
+    });
+  }
+  setupPreview('chat-file-input', 'chat-preview');
+  setupPreview('architect-file-input', 'architect-preview');
+</script>
+
 </body>
 </html>
