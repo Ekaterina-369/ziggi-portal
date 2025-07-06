@@ -106,7 +106,7 @@ pre code {
   background: #fff;           /* белый фон, как у полей */
   border: 1px solid #ccc;     /* та же рамка */
   border-radius: 8px;
-  height: 44px;               /* ровно высота поля */
+  height: 22px;               /* ровно высота поля */
   padding: 0 12px;            /* узкие боковины */
   font-size: 16px;
   cursor: pointer;
