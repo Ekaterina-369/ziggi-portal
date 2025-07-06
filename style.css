@@ -54,7 +54,7 @@ pre code {
   color: #111;
 }
 
-#input-container {
+#input-container {   <!-- Контейнер для полей ввода запроса, белый полупрозрачный, 100% ширины -->
   position: fixed;
   bottom: 0;
   left: 0;
@@ -70,20 +70,52 @@ pre code {
   border-top: 1px solid white;
 }
 
-#chat-form {
+#chat-form {   <!-- Расположение самой формы Зигги, в одну линию -->
   display: flex;
   max-width: 800px;
   width: 100%;
   gap: 10px;
 }
 
-#chat-input {
+#chat-input {    <!--Оформление текстового поля Зигги, задаёт высоту, закругления и отступы внутри поля ввода  -->
   flex: 1;
   padding: 10px;
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
+
+/* ————————————————
+   Стили для формы Архитектора,
+   повторяют оформление формы Зигги
+   ———————————————— */
+
+#architect-form {    
+  display: flex;
+  max-width: 800px;
+  width: 100%;
+  gap: 10px;
+}
+
+#architect-input {    
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Стили для выбора файла и кнопки отправки */
+#architect-form input[type="file"],
+#architect-form button {
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
 
 /* ✅ Кнопка теста теперь встроена и адаптирована под белый слой */
 #toggle-test {
